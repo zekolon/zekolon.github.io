@@ -8,69 +8,69 @@
   </head>
   <body>
     <div id="status-bar-container"></div>
-  <script>
-    // Dynamically load the shared status bar
-    fetch('status-bar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('status-bar-container').innerHTML = html;
-      });
-  </script>
-  <div class="main-content" style="display: flex; flex-direction: column; align-items: center;">
-    <p style="font-size: 1.3em; text-align: center; margin-bottom: 2em;">This is a corrupted dimension. Beware what you may find here.</p>
-  </div>
-</body>
+    <script>
+      // Dynamically load the shared status bar
+      fetch('status-bar.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('status-bar-container').innerHTML = html;
+        });
+    </script>
+    <div class="main-content" style="display: flex; flex-direction: column; align-items: center;">
+      <p style="font-size: 1.3em; text-align: center; margin-bottom: 2em;">This is a corrupted dimension. Beware what you may find here.</p>
+    </div>
 
-  </body>
-  <script>
-    // Rain effect removed
-    // Hide default cursor and show image following mouse
-    const cursorImg = document.getElementById("custom-cursor");
-    cursorImg.style.position = "fixed";
-    cursorImg.style.pointerEvents = "none";
-    cursorImg.style.zIndex = "10000";
-    cursorImg.style.width = "48px";
-    cursorImg.style.height = "48px";
-    document.body.style.cursor = "none";
-    let normalCursor = "assets/bright-blue-mouse-cursor-hd-png-Cg24Mv.png";
-    let pointerCursor = "assets/Adobe Express - file.png"; // Change to your pointer image
+    <script>
+      // Rain effect removed
+      // Hide default cursor and show image following mouse if the element exists
+      const cursorImg = document.getElementById("custom-cursor");
+      if (cursorImg) {
+        cursorImg.style.position = "fixed";
+        cursorImg.style.pointerEvents = "none";
+        cursorImg.style.zIndex = "10000";
+        cursorImg.style.width = "48px";
+        cursorImg.style.height = "48px";
+        document.body.style.cursor = "none";
+        let normalCursor = "assets/bright-blue-mouse-cursor-hd-png-Cg24Mv.png";
+        let pointerCursor = "assets/Adobe Express - file.png"; // Change to your pointer image
 
-    document.addEventListener("mousemove", function (e) {
-      cursorImg.style.display = "block";
-      cursorImg.style.left = e.clientX - 24 + "px";
-      cursorImg.style.top = e.clientY - 24 + "px";
-    });
-    document.addEventListener("mouseleave", function () {
-      cursorImg.style.display = "none";
-    });
-    document.addEventListener("mouseenter", function () {
-      cursorImg.style.display = "block";
-    });
+        document.addEventListener("mousemove", function (e) {
+          cursorImg.style.display = "block";
+          cursorImg.style.left = e.clientX - 24 + "px";
+          cursorImg.style.top = e.clientY - 24 + "px";
+        });
+        document.addEventListener("mouseleave", function () {
+          cursorImg.style.display = "none";
+        });
+        document.addEventListener("mouseenter", function () {
+          cursorImg.style.display = "block";
+        });
 
-    // Change cursor image on hover over clickable elements
-    function setPointerCursor() {
-      if (cursorImg.src !== window.location.origin + "/" + pointerCursor) {
-        cursorImg.src = pointerCursor;
-      }
-    }
-    function setNormalCursor() {
-      if (cursorImg.src !== window.location.origin + "/" + normalCursor) {
+        // Change cursor image on hover over clickable elements
+        function setPointerCursor() {
+          if (cursorImg.src !== window.location.origin + "/" + pointerCursor) {
+            cursorImg.src = pointerCursor;
+          }
+        }
+        function setNormalCursor() {
+          if (cursorImg.src !== window.location.origin + "/" + normalCursor) {
+            cursorImg.src = normalCursor;
+          }
+        }
+
+        // For all clickable elements
+        const clickables = document.querySelectorAll(
+          'a, button, [role="button"], input[type="button"], input[type="submit"], .hypno-link'
+        );
+        clickables.forEach((el) => {
+          el.addEventListener("mouseenter", setPointerCursor);
+          el.addEventListener("mouseleave", setNormalCursor);
+        });
+
+        // Set initial cursor image
         cursorImg.src = normalCursor;
       }
-    }
-
-    // For all clickable elements
-    const clickables = document.querySelectorAll(
-      'a, button, [role="button"], input[type="button"], input[type="submit"], .hypno-link'
-    );
-    clickables.forEach((el) => {
-      el.addEventListener("mouseenter", setPointerCursor);
-      el.addEventListener("mouseleave", setNormalCursor);
-    });
-
-    // Set initial cursor image
-    cursorImg.src = normalCursor;
-  </script>
+    </script>
   <!-- Music Player -->
   <div
     id="music-player"
@@ -99,24 +99,79 @@
         font-size: 1em;
         letter-spacing: 1px;
       "
-      >Awesome Rap Beat by Jay Tholen</span
+      >Leeches and The Festering Orifice by Jay Tholen</span
     >
     <audio
       id="audio-player"
-      src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 23 Awesome Rap Beat.mp3"
-      autoplay
+      data-filename="New Project (1).mp3"
+      preload="auto"
       controls
       loop
       style="width: 300px"
     ></audio>
+    <div id="audio-controls-extra" style="margin-left:1em; color:#ddd; font-size:0.9em; display:flex; gap:0.5em; align-items:center;">
+      <span id="audio-status">Waiting to load...</span>
+      <button id="audio-retry" style="display:none;">Retry</button>
+    </div>
   </div>
   <script>
-    // Ensure autoplay works and show song title
-    const audio = document.getElementById("audio-player");
-    if (audio) {
-      audio.volume = 0.7;
-      audio.play().catch(() => {});
-    }
-    // Optionally, update song title dynamically if you want to change tracks
+    // Robust audio loading with encoding, status, and retry
+    (function() {
+      const audio = document.getElementById('audio-player');
+      const status = document.getElementById('audio-status');
+      const retryBtn = document.getElementById('audio-retry');
+      if (!audio) return;
+
+      const filename = audio.getAttribute('data-filename');
+      const path = 'assets/' + filename;
+      const encoded = encodeURI(path);
+
+      function setStatus(text, isError) {
+        status.textContent = text;
+        status.style.color = isError ? '#ff8080' : '#ddd';
+      }
+
+      audio.preload = 'auto';
+      audio.src = encoded;
+
+      // Handlers
+      audio.addEventListener('loadedmetadata', function() {
+        setStatus('Loaded — ' + Math.round(audio.duration) + 's');
+        audio.volume = 0.7;
+      });
+      audio.addEventListener('canplay', function() {
+        setStatus('Ready to play');
+      });
+      audio.addEventListener('play', function() {
+        setStatus('Playing');
+      });
+      audio.addEventListener('pause', function() {
+        setStatus('Paused');
+      });
+      audio.addEventListener('error', function(e) {
+        console.error('Audio failed to load', e);
+        setStatus('Failed to load audio', true);
+        retryBtn.style.display = 'inline-block';
+      });
+
+      retryBtn.addEventListener('click', function() {
+        setStatus('Retrying...');
+        retryBtn.style.display = 'none';
+        // Force reload
+        audio.src = '';
+        // small timeout helps some browsers clear the failed state
+        setTimeout(function() {
+          audio.src = encoded;
+          audio.load();
+        }, 150);
+      });
+
+      // Try to load immediately, but avoid forcing autoplay — user can press play
+      try {
+        audio.load();
+      } catch (err) {
+        console.warn('audio.load() threw', err);
+      }
+    })();
   </script>
 </html>

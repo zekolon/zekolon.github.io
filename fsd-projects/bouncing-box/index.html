@@ -1,108 +1,431 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <title>Bouncing Box</title>
-    <script src="jquery.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Bouncing Sphere</title>
     <style>
-      .box {
-        width: 70px;
-        height: 70px;
-        background-color: teal;
-        font-size: 300%;
-        text-align: center;
-        user-select: none;
-        display: block;
-        position: absolute;
-        top: 100px;
-        /* Change me! */
-        left: 0px;
-      }
-
-      .board {
+      body.board {
+        position: relative;
+        width: 100vw;
         height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        background: #222;
+      }
+      .box {
+        position: absolute;
+        border-radius: 50%;
+        background: #4cf;
+        box-shadow: 0 0 16px #4cf8;
+        cursor: pointer;
       }
     </style>
-    <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   </head>
-
   <body class="board">
-    <!-- HTML for the box -->
-    <div class="box">?</div>
-
+    <div
+      class="score"
+      style="
+        position: fixed;
+        top: 16px;
+        right: 24px;
+        font-family: sans-serif;
+        font-size: 2em;
+        color: #fff;
+        z-index: 10;
+        user-select: none;
+      "
+    >
+      0
+    </div>
+    <div
+      class="shop"
+      style="
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 20;
+        background: #222c;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #0006;
+        font-family: sans-serif;
+        color: #fff;
+        user-select: none;
+        cursor: pointer;
+        transition: background 0.2s;
+      "
+    >
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: stretch;
+        "
+      >
+        <span style="font-size: 1.2em; margin-bottom: 4px">Shop</span>
+        <button
+          class="buy-golden"
+          style="
+            padding: 8px 16px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: none;
+            background: gold;
+            color: #222;
+            cursor: pointer;
+          "
+        >
+          Golden Sphere (100 pts)
+        </button>
+        <button
+          class="buy-sphere"
+          style="
+            padding: 8px 16px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: none;
+            background: #4cf;
+            color: #fff;
+            cursor: pointer;
+          "
+        >
+          Add Sphere (5 pts)
+        </button>
+        <button
+          class="buy-square"
+          style="
+            padding: 8px 16px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: none;
+            background: #fc4;
+            color: #222;
+            cursor: pointer;
+          "
+        >
+          Add Square (10 pts)
+        </button>
+        <button
+          class="buy-multiplier"
+          style="
+            padding: 8px 16px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: none;
+            background: #6f4;
+            color: #222;
+            cursor: pointer;
+          "
+        >
+          Double Points (15 pts)
+        </button>
+      </div>
+    </div>
+    <div class="box"></div>
     <script>
-      (function () {
-        "use strict";
-        /* global jQuery */
-
-        //////////////////////////////////////////////////////////////////
-        /////////////////// SETUP DO NOT DELETE //////////////////////////
-        //////////////////////////////////////////////////////////////////
-
-        var box = jQuery(".box"); // reference to the HTML .box element
-        var board = jQuery(".board"); // reference to the HTML .board element
-        var boardWidth = board.width(); // the maximum X-Coordinate of the screen
-
-        // update the boardWidth variable when the window is resized
-        jQuery(window).on("resize", function () {
-          boardWidth = board.width();
+      var goldenCooldown = false;
+      var goldenBtn = $(".buy-golden");
+      function createGoldenSphere() {
+        var radius = 40;
+        var pos = randomPosition(radius);
+        var v = randomVelocity(1.2);
+        var box = $('<div class="box"></div>');
+        board.append(box);
+        var sphere = {
+          box: box,
+          radius: radius,
+          posX: pos.x,
+          posY: pos.y,
+          velX: v.x,
+          velY: v.y,
+          isGolden: true,
+        };
+        box.css({
+          left: sphere.posX + "px",
+          top: sphere.posY + "px",
+          width: radius * 2 + "px",
+          height: radius * 2 + "px",
+          borderRadius: "50%",
+          background: "gold",
+          boxShadow: "0 0 24px gold, 0 0 8px #fff8",
+          border: "3px solid #fff",
+          zIndex: 50,
         });
-
-        // Every 50 milliseconds, call the update Function (see below)
-        setInterval(update, 50);
-
-        // Every time the box is clicked, call the handleBoxClick Function (see below)
-        box.on("click", handleBoxClick);
-
-        // moves the Box to a new position on the screen along the X-Axis
-        function moveBoxTo(newPositionX) {
-          box.css("left", newPositionX);
+        box.on("click", function (e) {
+          e.stopPropagation();
+          score += 10 * pointsMultiplier;
+          scoreEl.text(score);
+          // Remove this golden sphere
+          box.remove();
+          // Remove from spheres array
+          var idx = spheres.indexOf(sphere);
+          if (idx !== -1) spheres.splice(idx, 1);
+        });
+        spheres.push(sphere);
+      }
+      goldenBtn.on("click", function (e) {
+        e.stopPropagation();
+        if (goldenCooldown) return;
+        if (score >= 100) {
+          score -= 100;
+          scoreEl.text(score);
+          createGoldenSphere();
+          goldenBtn.text("Cooldown (30s)");
+          goldenCooldown = true;
+          setTimeout(function () {
+            goldenCooldown = false;
+            goldenBtn.text("Golden Sphere (100 pts)");
+          }, 30000);
+        } else {
+          goldenBtn.text("Need 100 pts!");
+          setTimeout(function () {
+            goldenBtn.text("Golden Sphere (100 pts)");
+          }, 1000);
         }
-
-        // changes the text displayed on the Box
-        function changeBoxText(newText) {
-          box.text(newText);
+      });
+      // Minimal: single moving, shrinking, speeding-up sphere
+      $(function () {
+        var board = $(".board");
+        var scoreEl = $(".score");
+        var shopBtn = $(".buy-sphere");
+        var shopSquareBtn = $(".buy-square");
+        var score = 0;
+        var pointsMultiplier = 1;
+        var spheres = [];
+        var squares = [];
+        var minRadius = 12;
+        var speedInc = 1.1;
+        function boardWidth() {
+          return board.width();
         }
-
-        //////////////////////////////////////////////////////////////////
-        /////////////////// YOUR CODE BELOW HERE /////////////////////////
-        //////////////////////////////////////////////////////////////////
-
-        // TODO 2 - Variable declarations
-
-
-
-
-
-        /**
-         * This Function will be called 20 times/second.
-         * Each time it is called, it should move the Box to a new location.
-         * If the box drifts off the screen, turn it around!
-         */
+        function boardHeight() {
+          return board.height();
+        }
+        function randomVelocity(mult) {
+          var speed = (2.5 + Math.random() * 2.5) * (mult || 1);
+          var angle = Math.random() * Math.PI * 2;
+          return { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
+        }
+        function randomPosition(size) {
+          var bw = boardWidth();
+          var bh = boardHeight();
+          var boxSize = size * 2;
+          return {
+            x: Math.random() * (bw - boxSize),
+            y: Math.random() * (bh - boxSize),
+          };
+        }
+        function createSphere() {
+          var radius = 35;
+          var pos = randomPosition(radius);
+          var v = randomVelocity();
+          var box = $('<div class="box"></div>');
+          board.append(box);
+          var sphere = {
+            box: box,
+            radius: radius,
+            posX: pos.x,
+            posY: pos.y,
+            velX: v.x,
+            velY: v.y,
+          };
+          box.css({
+            left: sphere.posX + "px",
+            top: sphere.posY + "px",
+            width: radius * 2 + "px",
+            height: radius * 2 + "px",
+            borderRadius: "50%",
+            background: "#4cf",
+            boxShadow: "0 0 16px #4cf8",
+          });
+          box.on("click", function (e) {
+            e.stopPropagation();
+            score += 1 * pointsMultiplier;
+            scoreEl.text(score);
+            // Randomize movement
+            var v = randomVelocity();
+            sphere.velX = v.x;
+            sphere.velY = v.y;
+            sphere.velX *= speedInc;
+            sphere.velY *= speedInc;
+            sphere.radius = Math.max(minRadius, sphere.radius * 0.85);
+            var pos = randomPosition(sphere.radius);
+            sphere.posX = pos.x;
+            sphere.posY = pos.y;
+            box.css({
+              left: sphere.posX + "px",
+              top: sphere.posY + "px",
+              width: sphere.radius * 2 + "px",
+              height: sphere.radius * 2 + "px",
+            });
+          });
+          spheres.push(sphere);
+        }
+        function createSquare() {
+          var size = 35;
+          var pos = randomPosition(size);
+          var v = randomVelocity(3); // 3x faster
+          var box = $("<div></div>");
+          board.append(box);
+          var square = {
+            box: box,
+            size: size,
+            posX: pos.x,
+            posY: pos.y,
+            velX: v.x,
+            velY: v.y,
+            shrinkRate: 0.995, // much slower shrink
+            lifetime: 30000, // 30 seconds
+            created: Date.now(),
+            removed: false,
+          };
+          box.css({
+            left: square.posX + "px",
+            top: square.posY + "px",
+            width: size * 2 + "px",
+            height: size * 2 + "px",
+            borderRadius: "10%",
+            background: "#fc4",
+            boxShadow: "0 0 16px #fc48",
+            position: "absolute",
+            cursor: "pointer",
+          });
+          box.on("click", function (e) {
+            e.stopPropagation();
+            if (!square.removed) {
+              score += 5 * pointsMultiplier;
+              scoreEl.text(score);
+              // Randomize movement
+              var v = randomVelocity(3);
+              square.velX = v.x;
+              square.velY = v.y;
+              // Teleport to a new random position
+              var pos = randomPosition(square.size);
+              square.posX = pos.x;
+              square.posY = pos.y;
+              box.css({
+                left: square.posX + "px",
+                top: square.posY + "px",
+              });
+            }
+          });
+          var shopMultiplierBtn = $(".buy-multiplier");
+          shopMultiplierBtn.on("click", function (e) {
+            e.stopPropagation();
+            if (pointsMultiplier >= 2) {
+              shopMultiplierBtn.text("Purchased");
+              return;
+            }
+            if (score >= 15) {
+              score -= 15;
+              pointsMultiplier = 2;
+              scoreEl.text(score);
+              shopMultiplierBtn.text("Purchased");
+            } else {
+              shopMultiplierBtn.text("Need 15 pts!");
+              setTimeout(function () {
+                shopMultiplierBtn.text("Double Points (15 pts)");
+              }, 1000);
+            }
+          });
+          squares.push(square);
+          setTimeout(function () {
+            if (!square.removed) {
+              square.removed = true;
+              box.remove();
+            }
+          }, square.lifetime);
+        }
+        // Remove the initial .box in HTML, use JS to create spheres
+        $(".box").remove();
+        createSphere();
         function update() {
-
-        
-
-          
+          var bw = boardWidth();
+          var bh = boardHeight();
+          spheres.forEach(function (sphere) {
+            sphere.posX += sphere.velX;
+            sphere.posY += sphere.velY;
+            var boxSize = sphere.radius * 2;
+            if (sphere.posX < 0) {
+              sphere.posX = 0;
+              sphere.velX = Math.abs(sphere.velX);
+            } else if (sphere.posX > bw - boxSize) {
+              sphere.posX = bw - boxSize;
+              sphere.velX = -Math.abs(sphere.velX);
+            }
+            if (sphere.posY < 0) {
+              sphere.posY = 0;
+              sphere.velY = Math.abs(sphere.velY);
+            } else if (sphere.posY > bh - boxSize) {
+              sphere.posY = bh - boxSize;
+              sphere.velY = -Math.abs(sphere.velY);
+            }
+            sphere.box.css({
+              left: sphere.posX + "px",
+              top: sphere.posY + "px",
+              width: boxSize,
+              height: boxSize,
+            });
+          });
+          // Update squares
+          squares.forEach(function (square) {
+            if (square.removed) return;
+            square.posX += square.velX;
+            square.posY += square.velY;
+            square.size *= square.shrinkRate;
+            var boxSize = square.size * 2;
+            if (square.posX < 0) {
+              square.posX = 0;
+              square.velX = Math.abs(square.velX);
+            } else if (square.posX > bw - boxSize) {
+              square.posX = bw - boxSize;
+              square.velX = -Math.abs(square.velX);
+            }
+            if (square.posY < 0) {
+              square.posY = 0;
+              square.velY = Math.abs(square.velY);
+            } else if (square.posY > bh - boxSize) {
+              square.posY = bh - boxSize;
+              square.velY = -Math.abs(square.velY);
+            }
+            square.box.css({
+              left: square.posX + "px",
+              top: square.posY + "px",
+              width: boxSize,
+              height: boxSize,
+            });
+          });
         }
-
-        /**
-         * This Function will be called each time the box is clicked.
-         * Each time it is called, it should perform each of the following actions:
-         * - increase the points total
-         * - increase the speed
-         * - move the box to the left side of the screen.
-         */
-        function handleBoxClick() {
-
-
-
-
-        }
-
-
-        
-      })();
+        setInterval(update, 50);
+        shopBtn.on("click", function (e) {
+          e.stopPropagation();
+          if (score >= 5) {
+            score -= 5;
+            scoreEl.text(score);
+            createSphere();
+          } else {
+            shopBtn.text("Need 5 pts!");
+            setTimeout(function () {
+              shopBtn.text("Add Sphere (5 pts)");
+            }, 1000);
+          }
+        });
+        shopSquareBtn.on("click", function (e) {
+          e.stopPropagation();
+          if (score >= 10) {
+            score -= 10;
+            scoreEl.text(score);
+            createSquare();
+          } else {
+            shopSquareBtn.text("Need 10 pts!");
+            setTimeout(function () {
+              shopSquareBtn.text("Add Square (10 pts)");
+            }, 1000);
+          }
+        });
+      });
     </script>
   </body>
 </html>

@@ -57,9 +57,9 @@ function getJSON(url, callback) {
       callback(status, xhr.response);
       // If the JSON fails to load, still run setup so the game can start.
       try {
-        if (typeof setupGame === 'function') setupGame();
+        if (typeof setupGame === "function") setupGame();
       } catch (e) {
-        console.warn('setupGame failed to run after JSON error', e);
+        console.warn("setupGame failed to run after JSON error", e);
       }
     }
   };
@@ -423,7 +423,7 @@ function playerFrictionAndGravity() {
 
   if (player.onGround === false) {
     // use playerGravity so flipping gravity only affects the player
-    const g = (typeof playerGravity !== 'undefined') ? playerGravity : gravity;
+    const g = typeof playerGravity !== "undefined" ? playerGravity : gravity;
     player.speedY = player.speedY + g;
   }
 }
@@ -781,7 +781,7 @@ function drawEnemies() {
     if (en.platformIndex !== null && platforms[en.platformIndex]) {
       const p = platforms[en.platformIndex];
       // keep enemy stuck to its platform's vertical position
-      en.y = (gravity > 0) ? p.y - en.height : p.y + p.height;
+      en.y = gravity > 0 ? p.y - en.height : p.y + p.height;
       // if platform moves, x is based on platform x + offset
       if (en.patrol) {
         en.offsetX += en.patrolSpeed * en.patrolDir;
@@ -799,13 +799,13 @@ function drawEnemies() {
     }
 
     // draw enemy as a red rectangle for now
-    ctx.fillStyle = 'crimson';
+    ctx.fillStyle = "crimson";
     ctx.fillRect(en.x, en.y, en.width, en.height);
   }
 }
 
 function drawSpikes() {
-  ctx.fillStyle = '#222';
+  ctx.fillStyle = "#222";
   for (let i = 0; i < spikes.length; i++) {
     const s = spikes[i];
     // draw simple triangle spike
@@ -822,8 +822,20 @@ function enemyCollision() {
   for (let i = 0; i < enemies.length; i++) {
     const e = enemies[i];
     // enemies now sit on platforms; collision still uses AABB
-    const ex = e.x !== undefined ? e.x : (platforms[e.platformIndex] ? platforms[e.platformIndex].x + (e.offsetX || 0) : 0);
-    const ey = e.y !== undefined ? e.y : (platforms[e.platformIndex] ? (gravity > 0 ? platforms[e.platformIndex].y - e.height : platforms[e.platformIndex].y + platforms[e.platformIndex].height) : 0);
+    const ex =
+      e.x !== undefined
+        ? e.x
+        : platforms[e.platformIndex]
+        ? platforms[e.platformIndex].x + (e.offsetX || 0)
+        : 0;
+    const ey =
+      e.y !== undefined
+        ? e.y
+        : platforms[e.platformIndex]
+        ? gravity > 0
+          ? platforms[e.platformIndex].y - e.height
+          : platforms[e.platformIndex].y + platforms[e.platformIndex].height
+        : 0;
     if (
       ex < player.x + hitBoxWidth &&
       ex + e.width > player.x &&
@@ -862,27 +874,27 @@ function spikeCollision() {
 
 function drawGravityIndicator() {
   // shows whether the player's gravity is normal or inverted
-  const g = (typeof playerGravity !== 'undefined') ? playerGravity : gravity;
-  const text = g < 0 ? 'Gravity: Inverted (S)' : 'Gravity: Normal (S)';
+  const g = typeof playerGravity !== "undefined" ? playerGravity : gravity;
+  const text = g < 0 ? "Gravity: Inverted (S)" : "Gravity: Normal (S)";
   const x = 12;
   const y = 12;
   const paddingX = 10;
   const paddingY = 6;
   ctx.save();
-  ctx.font = '16px sans-serif';
+  ctx.font = "16px sans-serif";
   const textWidth = ctx.measureText(text).width;
   const w = textWidth + paddingX * 2;
   const h = 20 + paddingY * 2;
   // background
   ctx.globalAlpha = 0.85;
-  ctx.fillStyle = '#111';
+  ctx.fillStyle = "#111";
   ctx.fillRect(x - 6, y - 8, w, h);
   // border
-  ctx.strokeStyle = '#555';
+  ctx.strokeStyle = "#555";
   ctx.strokeRect(x - 6, y - 8, w, h);
   // text
-  ctx.fillStyle = g < 0 ? '#ff8a80' : '#8cffb3';
-  ctx.textBaseline = 'top';
+  ctx.fillStyle = g < 0 ? "#ff8a80" : "#8cffb3";
+  ctx.textBaseline = "top";
   ctx.fillText(text, x + paddingX - 6, y - 4);
   ctx.restore();
 }
@@ -956,9 +968,12 @@ function keyboardControlActions() {
   // Jump: apply jump opposite to gravity direction
   if (keyPress.space || keyPress.up) {
     if (player.onGround) {
-  // apply jump in opposite direction of the player's gravity so it always jumps "away" from the ground
-  const gSign = Math.sign(typeof playerGravity !== 'undefined' ? playerGravity : gravity) || 1;
-  player.speedY += -gSign * playerJumpStrength;
+      // apply jump in opposite direction of the player's gravity so it always jumps "away" from the ground
+      const gSign =
+        Math.sign(
+          typeof playerGravity !== "undefined" ? playerGravity : gravity
+        ) || 1;
+      player.speedY += -gSign * playerJumpStrength;
       jumpTimer = 19; //this counts how many frames to have the jump last.
       player.onGround = false; //bug fix for jump animation, you have to change this or the jump animation doesn't work
       frameIndex = 4;
@@ -968,28 +983,28 @@ function keyboardControlActions() {
 
 function handleKeyDown(e) {
   keyPress.any = true;
-  const k = (e.key || '').toLowerCase();
+  const k = (e.key || "").toLowerCase();
   // Support Arrow keys and WASD, and also e.code for Space
-  if (k === 'arrowup' || k === 'w') keyPress.up = true;
-  if (k === 'arrowleft' || k === 'a') keyPress.left = true;
-  if (k === 'arrowdown' || k === 's') keyPress.down = true;
-  if (k === 'arrowright' || k === 'd') keyPress.right = true;
-  if (e.code === 'Space' || k === ' ') keyPress.space = true;
+  if (k === "arrowup" || k === "w") keyPress.up = true;
+  if (k === "arrowleft" || k === "a") keyPress.left = true;
+  if (k === "arrowdown" || k === "s") keyPress.down = true;
+  if (k === "arrowright" || k === "d") keyPress.right = true;
+  if (e.code === "Space" || k === " ") keyPress.space = true;
 }
 
 function handleKeyUp(e) {
-  const k = (e.key || '').toLowerCase();
-  if (k === 'arrowup' || k === 'w') keyPress.up = false;
-  if (k === 'arrowleft' || k === 'a') keyPress.left = false;
-  if (k === 'arrowdown' || k === 's') {
+  const k = (e.key || "").toLowerCase();
+  if (k === "arrowup" || k === "w") keyPress.up = false;
+  if (k === "arrowleft" || k === "a") keyPress.left = false;
+  if (k === "arrowdown" || k === "s") {
     keyPress.down = false;
     if (currentAnimationType === animationTypes.duck) {
       duckTimer = 8;
       frameIndex = 20;
     }
   }
-  if (k === 'arrowright' || k === 'd') keyPress.right = false;
-  if (e.code === 'Space' || k === ' ') keyPress.space = false;
+  if (k === "arrowright" || k === "d") keyPress.right = false;
+  if (e.code === "Space" || k === " ") keyPress.space = false;
 }
 
 function loadJson() {

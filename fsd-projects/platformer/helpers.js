@@ -23,6 +23,8 @@ function main() {
   drawFakePlatforms();
   drawProjectiles();
   drawCannons();
+  drawSpikes();
+  drawEnemies();
   drawCollectables();
   playerFrictionAndGravity();
 
@@ -33,10 +35,13 @@ function main() {
   keyboardControlActions(); //keyboard controls.
   projectileCollision(); //checks if the player is getting hit by a projectile in the next frame
   collectablesCollide(); //checks if player has touched a collectable
+  enemyCollision();
+  spikeCollision();
 
   animate(); //this changes halle's picture to the next frame so it looks animated.
   // debug()                   //debugging values. Comment this out when not debugging.
   drawRobot(); //this actually displays the image of the robot.
+  drawGravityIndicator();
 }
 
 function getJSON(url, callback) {
@@ -50,6 +55,12 @@ function getJSON(url, callback) {
       setupGame();
     } else {
       callback(status, xhr.response);
+      // If the JSON fails to load, still run setup so the game can start.
+      try {
+        if (typeof setupGame === 'function') setupGame();
+      } catch (e) {
+        console.warn('setupGame failed to run after JSON error', e);
+      }
     }
   };
   xhr.send();
@@ -411,7 +422,9 @@ function playerFrictionAndGravity() {
   }
 
   if (player.onGround === false) {
-    player.speedY = player.speedY + gravity;
+    // use playerGravity so flipping gravity only affects the player
+    const g = (typeof playerGravity !== 'undefined') ? playerGravity : gravity;
+    player.speedY = player.speedY + g;
   }
 }
 
@@ -715,6 +728,165 @@ function createCollectable(
   }
 }
 
+// ENEMIES AND SPIKES
+function createEnemy(x, y) {
+  // Attach enemy to the platform it's spawned on (if any) so it stays on that platform.
+  let platformIndex = null;
+  for (let i = 0; i < platforms.length; i++) {
+    const p = platforms[i];
+    // if x is within platform bounds and y is near platform top
+    if (x >= p.x && x <= p.x + p.width && Math.abs(y - (p.y - 48)) < 120) {
+      platformIndex = i;
+      break;
+    }
+  }
+
+  const width = 40;
+  const height = 48;
+  if (platformIndex !== null) {
+    const p = platforms[platformIndex];
+    const offsetX = Math.max(0, Math.min(p.width - width, x - p.x));
+    enemies.push({
+      platformIndex,
+      offsetX,
+      width,
+      height,
+      // patrol settings
+      patrol: Math.random() < 0.6, // most enemies patrol, some stay still
+      patrolSpeed: Math.random() * 0.6 + 0.4,
+      patrolDir: Math.random() < 0.5 ? 1 : -1,
+      facingRight: true,
+    });
+  } else {
+    // if no platform found, create a static enemy at x,y
+    enemies.push({
+      x,
+      y,
+      width,
+      height,
+      platformIndex: null,
+      patrol: false,
+      facingRight: true,
+    });
+  }
+}
+
+function createSpike(x, y, width = 24, height = 12) {
+  spikes.push({ x, y, width, height });
+}
+
+function drawEnemies() {
+  for (let i = 0; i < enemies.length; i++) {
+    const en = enemies[i];
+    if (en.platformIndex !== null && platforms[en.platformIndex]) {
+      const p = platforms[en.platformIndex];
+      // keep enemy stuck to its platform's vertical position
+      en.y = (gravity > 0) ? p.y - en.height : p.y + p.height;
+      // if platform moves, x is based on platform x + offset
+      if (en.patrol) {
+        en.offsetX += en.patrolSpeed * en.patrolDir;
+        if (en.offsetX < 0) {
+          en.offsetX = 0;
+          en.patrolDir *= -1;
+        } else if (en.offsetX > p.width - en.width) {
+          en.offsetX = Math.max(0, p.width - en.width);
+          en.patrolDir *= -1;
+        }
+      }
+      en.x = p.x + (en.offsetX || 0);
+    } else {
+      // static enemy in world space; no AI movement
+    }
+
+    // draw enemy as a red rectangle for now
+    ctx.fillStyle = 'crimson';
+    ctx.fillRect(en.x, en.y, en.width, en.height);
+  }
+}
+
+function drawSpikes() {
+  ctx.fillStyle = '#222';
+  for (let i = 0; i < spikes.length; i++) {
+    const s = spikes[i];
+    // draw simple triangle spike
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y + s.height);
+    ctx.lineTo(s.x + s.width / 2, s.y);
+    ctx.lineTo(s.x + s.width, s.y + s.height);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function enemyCollision() {
+  for (let i = 0; i < enemies.length; i++) {
+    const e = enemies[i];
+    // enemies now sit on platforms; collision still uses AABB
+    const ex = e.x !== undefined ? e.x : (platforms[e.platformIndex] ? platforms[e.platformIndex].x + (e.offsetX || 0) : 0);
+    const ey = e.y !== undefined ? e.y : (platforms[e.platformIndex] ? (gravity > 0 ? platforms[e.platformIndex].y - e.height : platforms[e.platformIndex].y + platforms[e.platformIndex].height) : 0);
+    if (
+      ex < player.x + hitBoxWidth &&
+      ex + e.width > player.x &&
+      ey < player.y + hitBoxHeight &&
+      ey + e.height > player.y
+    ) {
+      currentAnimationType = animationTypes.frontDeath;
+      frameIndex = 0;
+    }
+  }
+}
+
+function spikeCollision() {
+  for (let i = 0; i < spikes.length; i++) {
+    const s = spikes[i];
+    // AABB overlap test
+    if (
+      s.x < player.x + hitBoxWidth &&
+      s.x + s.width > player.x &&
+      s.y < player.y + hitBoxHeight &&
+      s.y + s.height > player.y
+    ) {
+      // compute vertical overlap depth
+      const top = Math.max(player.y, s.y);
+      const bottom = Math.min(player.y + hitBoxHeight, s.y + s.height);
+      const vertOverlap = bottom - top;
+      // if there is a meaningful vertical overlap (stepping onto spike from above or below), kill the player
+      if (vertOverlap > 6) {
+        currentAnimationType = animationTypes.frontDeath;
+        frameIndex = 0;
+        return;
+      }
+    }
+  }
+}
+
+function drawGravityIndicator() {
+  // shows whether the player's gravity is normal or inverted
+  const g = (typeof playerGravity !== 'undefined') ? playerGravity : gravity;
+  const text = g < 0 ? 'Gravity: Inverted (S)' : 'Gravity: Normal (S)';
+  const x = 12;
+  const y = 12;
+  const paddingX = 10;
+  const paddingY = 6;
+  ctx.save();
+  ctx.font = '16px sans-serif';
+  const textWidth = ctx.measureText(text).width;
+  const w = textWidth + paddingX * 2;
+  const h = 20 + paddingY * 2;
+  // background
+  ctx.globalAlpha = 0.85;
+  ctx.fillStyle = '#111';
+  ctx.fillRect(x - 6, y - 8, w, h);
+  // border
+  ctx.strokeStyle = '#555';
+  ctx.strokeRect(x - 6, y - 8, w, h);
+  // text
+  ctx.fillStyle = g < 0 ? '#ff8a80' : '#8cffb3';
+  ctx.textBaseline = 'top';
+  ctx.fillText(text, x + paddingX - 6, y - 4);
+  ctx.restore();
+}
+
 function createProjectile(wallLocation, x, y, width, height) {
   //checking if the player is dead
   if (currentAnimationType === animationTypes.frontDeath) {
@@ -781,10 +953,12 @@ function keyboardControlActions() {
     player.speedX += walkAcceleration;
     player.facingRight = true;
   }
+  // Jump: apply jump opposite to gravity direction
   if (keyPress.space || keyPress.up) {
     if (player.onGround) {
-      //this only lets you jump if you are on the ground
-      player.speedY = player.speedY - playerJumpStrength;
+  // apply jump in opposite direction of the player's gravity so it always jumps "away" from the ground
+  const gSign = Math.sign(typeof playerGravity !== 'undefined' ? playerGravity : gravity) || 1;
+  player.speedY += -gSign * playerJumpStrength;
       jumpTimer = 19; //this counts how many frames to have the jump last.
       player.onGround = false; //bug fix for jump animation, you have to change this or the jump animation doesn't work
       frameIndex = 4;
@@ -794,43 +968,28 @@ function keyboardControlActions() {
 
 function handleKeyDown(e) {
   keyPress.any = true;
-  if (e.key === "ArrowUp" || e.key === "w") {
-    keyPress.up = true;
-  }
-  if (e.key === "ArrowLeft" || e.key === "a") {
-    keyPress.left = true;
-  }
-  if (e.key === "ArrowDown" || e.key === "s") {
-    keyPress.down = true;
-  }
-  if (e.key === "ArrowRight" || e.key === "d") {
-    keyPress.right = true;
-  }
-  if (e.key === " ") {
-    keyPress.space = true;
-  }
+  const k = (e.key || '').toLowerCase();
+  // Support Arrow keys and WASD, and also e.code for Space
+  if (k === 'arrowup' || k === 'w') keyPress.up = true;
+  if (k === 'arrowleft' || k === 'a') keyPress.left = true;
+  if (k === 'arrowdown' || k === 's') keyPress.down = true;
+  if (k === 'arrowright' || k === 'd') keyPress.right = true;
+  if (e.code === 'Space' || k === ' ') keyPress.space = true;
 }
 
 function handleKeyUp(e) {
-  if (e.key === "ArrowUp" || e.key === "w") {
-    keyPress.up = false;
-  }
-  if (e.key === "ArrowLeft" || e.key === "a") {
-    keyPress.left = false;
-  }
-  if (e.key === "ArrowDown" || e.key === "s") {
+  const k = (e.key || '').toLowerCase();
+  if (k === 'arrowup' || k === 'w') keyPress.up = false;
+  if (k === 'arrowleft' || k === 'a') keyPress.left = false;
+  if (k === 'arrowdown' || k === 's') {
     keyPress.down = false;
     if (currentAnimationType === animationTypes.duck) {
       duckTimer = 8;
       frameIndex = 20;
     }
   }
-  if (e.key === "ArrowRight" || e.key === "d") {
-    keyPress.right = false;
-  }
-  if (e.key === " ") {
-    keyPress.space = false;
-  }
+  if (k === 'arrowright' || k === 'd') keyPress.right = false;
+  if (e.code === 'Space' || k === ' ') keyPress.space = false;
 }
 
 function loadJson() {

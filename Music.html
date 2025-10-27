@@ -5,88 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Minimal styles for the roulette highlight and layout */
+      .music-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+        margin-top: 1em;
+      }
+      .music-item {
+        position: relative;
+        width: 371px;
+        height: 210px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .music-item iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .roulette-highlight {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.95) inset;
+        pointer-events: none;
+        transition: box-shadow 150ms ease;
+      }
+      /* place the button via the top header container; keep button visuals here */
+      #randomize-btn {
+        padding: 0.6rem 0.9rem;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #ffd36e, #ffb84a);
+        border: 2px solid #fff8;
+        box-shadow: 0 6px 18px #0006;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-block;
+      }
+      #randomize-btn[disabled] {
+        opacity: 0.5;
+        cursor: default;
+      }
+    </style>
   </head>
   <body>
     <div id="status-bar-container"></div>
-  <script>
-    // Dynamically load the shared status bar
-    fetch('status-bar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('status-bar-container').innerHTML = html;
-      });
-  </script>
-   <div class="main-content" style="display: flex; flex-direction: row; align-items: flex-start;">
-      <div style="flex: 1;">
-        <h1>Music</h1>
-        <p style="text-align: center;">
-          These are some of my favorite songs!
-        </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; margin-top: 1em;">
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/EhGEGIBGLu8?si=oI68vokra_607vqt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/YwUjUj2_2_c" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/iYYRH4apXDo?si=iAnKvtX9Di00fV8J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></iframe>
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/M3aW7ug1p0M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/L397TWLwrUU?si=s7H51olaGfhZ3iov" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  <iframe width="371" height="210" src="https://www.youtube.com/embed/KrZHPOeOxQQ?si=fUA6CKrl_hNwv-52" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-  <a href="index.html" class="hypno-link" style="position: absolute; top: 1em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Home</a>
-  <a href="portfolio.html" class="hypno-link" style="position: absolute; top: 3.2em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Portfolio</a>
-  <a href="Gallery.html" class="hypno-link" style="position: absolute; top: 5.5em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Gallery</a>
-    </div>
-  <!-- Rain effect removed -->
+    <script>
+      // Dynamically load the shared status bar
+      fetch("status-bar.html")
+        .then((response) => response.text())
+        .then((html) => {
+          document.getElementById("status-bar-container").innerHTML = html;
+        })
+        .catch(() => {});
+    </script>
+
     <div
-      class="bottom-image-slot"
-      style="
-        position: fixed;
-        right: 2vw;
-        bottom: 2vh;
-        z-index: 10001;
-        display: flex;
-        justify-content: flex-end;
-        align-items: end;
-        pointer-events: auto;
-      "
+      class="main-content"
+      style="display: flex; flex-direction: row; align-items: flex-start"
     >
-      <a href="Corrupted.html">
-        <img
-          src="assets/OIP__3_-removebg-preview.png"
-          alt="Bottom Slot Image"
+      <div style="flex: 1; padding: 1.5rem">
+        <div
+          style="text-align: center; margin-top: 1rem; margin-bottom: 0.75rem"
+        >
+          <div style="display: inline-flex; align-items: center; gap: 0.75rem">
+            <h1 style="margin: 0">Music</h1>
+            <button
+              id="randomize-btn"
+              style="
+                padding: 0.4rem 0.7rem;
+                border-radius: 6px;
+                background: linear-gradient(180deg, #ffd36e, #ffb84a);
+                border: 1px solid #fff4;
+                font-weight: 700;
+                cursor: pointer;
+              "
+            >
+              Randomize
+            </button>
+          </div>
+          <p style="margin: 0.4rem 0 0">These are some of my favorite songs!</p>
+        </div>
+
+        <!-- Additional videos shown at the bottom of the grid -->
+        <div class="music-grid" id="music-grid-bottom" style="margin-top:0.75rem;">
+          <div class="music-item"><iframe id="yt-3" src="https://www.youtube.com/embed/M3aW7ug1p0M?enablejsapi=1&origin=" title="YouTube video player 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="music-item"><iframe id="yt-4" src="https://www.youtube.com/embed/L397TWLwrUU?enablejsapi=1&origin=" title="YouTube video player 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        </div>
+
+        <div class="music-grid" id="music-grid">
+          <div class="music-item">
+            <iframe
+              id="yt-0"
+              src="https://www.youtube.com/embed/EhGEGIBGLu8?si=9tiehXkUZ7cUDG7r"
+              title="YouTube video player 1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="music-item">
+            <iframe
+              id="yt-1"
+              src="https://www.youtube.com/embed/mgkng6k_rxA?si=iAmCPd686PYPwJOd"
+              title="YouTube video player 2"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="music-item">
+            <iframe
+              id="yt-2"
+              src="https://www.youtube.com/embed/iYYRH4apXDo?enablejsapi=1&origin="
+              title="YouTube video player 3"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+          </div>
+        </div>
+
+        <a
+          href="index.html"
+          class="hypno-link"
           style="
-            max-width: 220px;
-            max-height: 90px;
-            object-fit: contain;
-            box-shadow: 0 2px 8px #000a;
-            border-radius: 8px;
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            z-index: 10;
+            font-size: 1.1em;
           "
-        />
-      </a>
+          >&larr; Home</a
+        >
+        <a
+          href="portfolio.html"
+          class="hypno-link"
+          style="
+            position: absolute;
+            top: 3.2em;
+            left: 1em;
+            z-index: 10;
+            font-size: 1.1em;
+          "
+          >&larr; Portfolio</a
+        >
+        <a
+          href="Gallery.html"
+          class="hypno-link"
+          style="
+            position: absolute;
+            top: 5.5em;
+            left: 1em;
+            z-index: 10;
+            font-size: 1.1em;
+          "
+          >&larr; Gallery</a
+        >
+      </div>
+
+      <div style="width: 240px; padding: 1rem">
+        <!-- sidebar / extra content if needed -->
+      </div>
     </div>
-  </body>
-  <script>
-    // Rain effect removed
-  </script>
-</html>
-    <!-- Music Player -->
-    <div
-      id="music-player"
-      style="
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100vw;
-        background: #181818ee;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5em 1em;
-        z-index: 9999;
-        box-shadow: 0 -2px 12px #000a;
-        font-family: inherit;
-      "
-    >
+
+    <!-- Removed fixed randomize button, rain canvas, and custom cursor per request -->
+
+    <!-- Music Player bar (now static) -->
+    <div id="music-player" style="position: static; width: 100%; background: #181818ee; color: #fff; display: flex; align-items: center; justify-content: center; padding: 0.75em 1em; box-shadow: 0 -2px 12px #000a; font-family: inherit; margin-top: 2rem;">
       <span
         id="song-title"
         style="
@@ -106,106 +196,321 @@
         style="width: 300px"
       ></audio>
     </div>
+
+    <div
+      class="bottom-image-slot"
+      style="
+        position: fixed;
+        right: 2vw;
+        bottom: 2vh;
+        z-index: 10001;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        pointer-events: auto;
+      "
+    >
+      <a href="Corrupted.html"
+        ><img
+          src="assets/OIP__3_-removebg-preview.png"
+          alt="Bottom Slot Image"
+          style="
+            max-width: 220px;
+            max-height: 90px;
+            object-fit: contain;
+            box-shadow: 0 2px 8px #000a;
+            border-radius: 8px;
+          "
+      /></a>
+    </div>
+
     <script>
-      // Rain effect
-      const rainCanvas = document.getElementById("rain-canvas");
-      function resizeRainCanvas() {
-        rainCanvas.width = window.innerWidth;
-        rainCanvas.height = window.innerHeight;
-        rainCanvas.style.position = "fixed";
-        rainCanvas.style.left = "0";
-        rainCanvas.style.top = "0";
-        rainCanvas.style.pointerEvents = "none";
-        rainCanvas.style.zIndex = "9998";
-      }
-      resizeRainCanvas();
-      window.addEventListener("resize", resizeRainCanvas);
-
-      const ctx = rainCanvas.getContext("2d");
-      const raindrops = [];
-      const rainColor = "rgba(120,180,255,0.45)";
-      const rainCount = 80;
-      for (let i = 0; i < rainCount; i++) {
-        raindrops.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          len: 10 + Math.random() * 18,
-          speed: 3 + Math.random() * 4,
-        });
-      }
-      function drawRain() {
-        ctx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
-        ctx.strokeStyle = rainColor;
-        ctx.lineWidth = 1.2;
-        ctx.lineCap = "round";
-        for (let drop of raindrops) {
-          ctx.beginPath();
-          ctx.moveTo(drop.x, drop.y);
-          ctx.lineTo(drop.x, drop.y + drop.len);
-          ctx.stroke();
-          drop.y += drop.speed;
-          if (drop.y > window.innerHeight) {
-            drop.x = Math.random() * window.innerWidth;
-            drop.y = -drop.len;
-            drop.len = 10 + Math.random() * 18;
-            drop.speed = 3 + Math.random() * 4;
-          }
-        }
-        requestAnimationFrame(drawRain);
-      }
-      drawRain();
-      // Hide default cursor and show image following mouse
-      const cursorImg = document.getElementById("custom-cursor");
-      cursorImg.style.position = "fixed";
-      cursorImg.style.pointerEvents = "none";
-      cursorImg.style.zIndex = "10000";
-      cursorImg.style.width = "48px";
-      cursorImg.style.height = "48px";
-      document.body.style.cursor = "none";
-      let normalCursor = "assets/bright-blue-mouse-cursor-hd-png-Cg24Mv.png";
-      let pointerCursor = "assets/Adobe Express - file.png"; // Change to your pointer image
-
-      document.addEventListener("mousemove", function (e) {
-        cursorImg.style.display = "block";
-        cursorImg.style.left = e.clientX - 24 + "px";
-        cursorImg.style.top = e.clientY - 24 + "px";
-      });
-      document.addEventListener("mouseleave", function () {
-        cursorImg.style.display = "none";
-      });
-      document.addEventListener("mouseenter", function () {
-        cursorImg.style.display = "block";
-      });
-
-      // Change cursor image on hover over clickable elements
-      function setPointerCursor() {
-        if (cursorImg.src !== window.location.origin + "/" + pointerCursor) {
-          cursorImg.src = pointerCursor;
-        }
-      }
-      function setNormalCursor() {
-        if (cursorImg.src !== window.location.origin + "/" + normalCursor) {
-          cursorImg.src = normalCursor;
-        }
-      }
-
-      // For all clickable elements
-      const clickables = document.querySelectorAll(
-        'a, button, [role="button"], input[type="button"], input[type="submit"], .hypno-link'
-      );
-      clickables.forEach((el) => {
-        el.addEventListener("mouseenter", setPointerCursor);
-        el.addEventListener("mouseleave", setNormalCursor);
-      });
-
-      // Set initial cursor image
-      cursorImg.src = normalCursor;
+      // Rain effect and custom cursor removed per user request
 
       // Ensure autoplay works and show song title
       const audio = document.getElementById("audio-player");
-      audio.volume = 0.7;
-      audio.play().catch(() => {});
-      // Optionally, update song title dynamically if you want to change tracks
+      if (audio) {
+        audio.volume = 0.7;
+        audio.play().catch(() => {});
+      }
+    </script>
+
+    <!-- YouTube IFrame API + roulette logic -->
+    <script>
+  // We'll create YT.Player instances for each iframe so we can call playVideo()
+  const videoCount = 5;
+  const players = new Array(videoCount).fill(null);
+      const iframeIds = [];
+      for (let i = 0; i < videoCount; i++) iframeIds.push("yt-" + i);
+
+      // Ensure each iframe has a valid origin and enablejsapi param before loading the API.
+      (function fixIframeSrcs() {
+        try {
+          iframeIds.forEach((id) => {
+            const iframe = document.getElementById(id);
+            if (!iframe) return;
+            try {
+              const url = new URL(
+                iframe.getAttribute("src"),
+                window.location.href
+              );
+              // ensure enablejsapi=1
+              if (!url.searchParams.get("enablejsapi"))
+                url.searchParams.set("enablejsapi", "1");
+              // set origin to current origin if missing or empty
+              const originParam = url.searchParams.get("origin");
+              if (!originParam)
+                url.searchParams.set("origin", window.location.origin);
+              iframe.setAttribute("src", url.toString());
+            } catch (e) {
+              // fallback: if URL parsing fails, append origin param naively
+              let s = iframe.getAttribute("src") || "";
+              if (s.indexOf("enablejsapi=1") === -1)
+                s += (s.indexOf("?") === -1 ? "?" : "&") + "enablejsapi=1";
+              if (s.indexOf("origin=") === -1)
+                s += "&origin=" + encodeURIComponent(window.location.origin);
+              iframe.setAttribute("src", s);
+            }
+          });
+        } catch (e) {}
+      })();
+
+      // Load the IFrame Player API code asynchronously.
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      function onYouTubeIframeAPIReady() {
+        // initialize players
+        iframeIds.forEach((id, idx) => {
+          try {
+            players[idx] = new YT.Player(id, {
+              events: {
+                onReady: function () {},
+                onStateChange: function () {},
+              },
+            });
+          } catch (e) {
+            console.warn("YT player init failed for", id, e);
+          }
+        });
+      }
+
+      // Helper: get all video item elements (top grid + bottom grid)
+      function getAllVideoItems() {
+        const top = Array.from(document.querySelectorAll('#music-grid .music-item'));
+        const bottom = Array.from(document.querySelectorAll('#music-grid-bottom .music-item'));
+        return top.concat(bottom);
+      }
+
+      // Helper: highlight/unhighlight an item by global index
+      function setHighlight(index, on) {
+        const items = getAllVideoItems();
+        const item = items[index];
+        if (!item) return;
+        let highlight = item.querySelector('.roulette-highlight');
+        if (on) {
+          if (!highlight) {
+            highlight = document.createElement('div');
+            highlight.className = 'roulette-highlight';
+            item.appendChild(highlight);
+          }
+        } else {
+          if (highlight) highlight.remove();
+        }
+      }
+
+      // Roulette animation: cycles through items then picks finalIndex
+      function runRoulette(finalIndex, cycles = 3) {
+        return new Promise((resolve) => {
+          const items = getAllVideoItems();
+          if (!items || items.length === 0) {
+            resolve(finalIndex);
+            return;
+          }
+          const n = items.length;
+          let order = [];
+          // generate cycling order that lands on finalIndex after cycles
+          for (let c = 0; c < cycles; c++) {
+            for (let i = 0; i < n; i++) order.push(i);
+          }
+          // append a partial cycle leading to finalIndex
+          const last = order.length ? order[order.length - 1] : -1;
+          const extra = (finalIndex + n - last - 1) % n;
+          for (let i = 0; i <= extra; i++) order.push((last + 1 + i) % n);
+
+          let i = 0;
+          let delay = 80; // start fast
+          function step() {
+            if (i > 0) setHighlight(order[i - 1], false);
+            setHighlight(order[i], true);
+            i++;
+            if (i < order.length) {
+              // slow down towards the end
+              delay = Math.min(400, delay + (i / order.length) * 30);
+              setTimeout(step, delay);
+            } else {
+              resolve(order[order.length - 1]);
+            }
+          }
+          step();
+        });
+      }
+
+      async function pickAndPlayRandom() {
+        const btn = document.getElementById("randomize-btn");
+        if (!btn) return;
+        btn.disabled = true;
+
+        const items = getAllVideoItems();
+        const n = items ? items.length : 0;
+        if (n === 0) {
+          btn.disabled = false;
+          return;
+        }
+
+        const finalIndex = Math.floor(Math.random() * n);
+        await runRoulette(finalIndex, 4);
+
+        // Try to play via YT API if ready, otherwise show a click overlay
+        const player = players[finalIndex];
+        if (player && typeof player.playVideo === "function") {
+          try {
+            player.playVideo();
+          } catch (e) {
+            console.warn("playVideo failed", e);
+            promptPlay(finalIndex);
+          }
+        } else {
+          // fallback: instruct user to click the iframe to play
+          promptPlay(finalIndex);
+        }
+
+        // re-enable after a short delay
+        setTimeout(() => {
+          btn.disabled = false;
+        }, 700);
+      }
+
+      // Pause all videos (YT players or raw iframes) and remove overlays/highlights
+      function pauseAllVideos() {
+        // pause via API if available
+        for (let i = 0; i < players.length; i++) {
+          const p = players[i];
+          try {
+            if (p && typeof p.pauseVideo === "function") {
+              p.pauseVideo();
+            }
+          } catch (e) {
+            console.warn("pauseVideo failed for player", i, e);
+          }
+          // fallback: postMessage command for YT iframe
+          const iframe = document.getElementById("yt-" + i);
+          if (iframe && iframe.contentWindow) {
+            try {
+              iframe.contentWindow.postMessage(
+                JSON.stringify({
+                  event: "command",
+                  func: "pauseVideo",
+                  args: [],
+                }),
+                "*"
+              );
+            } catch (e) {
+              // ignore
+            }
+          }
+        }
+
+        // also pause bottom audio if present
+        try {
+          const a = document.getElementById("audio-player");
+          if (a && !a.paused) a.pause();
+        } catch (e) {}
+
+        // remove click-to-play overlays and roulette highlights from all items
+        const items = getAllVideoItems();
+        if (items && items.length) {
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const overlay = item.querySelector('div[style*="Click to play"]');
+            // remove any .roulette-highlight nodes
+            const highlight = item.querySelector(".roulette-highlight");
+            if (highlight) highlight.remove();
+            // remove overlays by classless detection (we appended overlays without a class)
+            const overlays = Array.from(item.children).filter(
+              (c) => c !== item.querySelector("iframe") && c !== highlight
+            );
+            overlays.forEach((o) => {
+              if (o && o.innerText && /Click to play/i.test(o.innerText)) o.remove();
+            });
+          }
+        }
+      }
+
+      function promptPlay(index) {
+        const items = getAllVideoItems();
+        if (!items || !items.length) return;
+        const item = items[index];
+        if (!item) return;
+        // small overlay
+        const overlay = document.createElement("div");
+        overlay.style.position = "absolute";
+        overlay.style.left = 0;
+        overlay.style.top = 0;
+        overlay.style.right = 0;
+        overlay.style.bottom = 0;
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.background = "rgba(0,0,0,0.35)";
+        overlay.style.color = "#fff";
+        overlay.style.fontWeight = "700";
+        overlay.style.cursor = "pointer";
+        overlay.innerText = "Click to play";
+        overlay.addEventListener("click", () => {
+          const iframe = item.querySelector("iframe");
+          if (iframe) {
+            iframe.contentWindow.focus();
+            // Try to simulate a user interaction by reloading the src (this will be a click-originated navigation)
+            const src = iframe.getAttribute("src");
+            iframe.setAttribute("src", src);
+            overlay.remove();
+          }
+        });
+        item.appendChild(overlay);
+      }
+
+      function anyVideoPlaying() {
+        try {
+          for (let i = 0; i < players.length; i++) {
+            const p = players[i];
+            if (
+              p &&
+              typeof p.getPlayerState === "function" &&
+              typeof YT !== "undefined"
+            ) {
+              try {
+                if (p.getPlayerState() === YT.PlayerState.PLAYING) return true;
+              } catch (e) {}
+            }
+          }
+        } catch (e) {}
+        // also check bottom audio
+        try {
+          const a = document.getElementById("audio-player");
+          if (a && !a.paused) return true;
+        } catch (e) {}
+        return false;
+      }
+
+      document.getElementById("randomize-btn").addEventListener("click", () => {
+        // Always pause any currently playing media first, then run the roulette and play the chosen video.
+        pauseAllVideos();
+        // small delay to let pause messages take effect before playing the next one
+        setTimeout(() => pickAndPlayRandom(), 150);
+      });
     </script>
   </body>
 </html>

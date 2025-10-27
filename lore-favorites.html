@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Lore favorites</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .content {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      .hero {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .description {
+        text-align: center;
+        color: #ddd;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status-bar-container"></div>
+    <script>
+      // load shared status bar
+      fetch("status-bar.html")
+        .then((r) => r.text())
+        .then((html) => {
+          document.getElementById("status-bar-container").innerHTML = html;
+        })
+        .catch(() => {});
+    </script>
+    <!-- Main header and content -->
+    <header
+      class="main-header"
+      style="text-align: center; padding: 2rem 1rem 0"
+    >
+      <div style="max-width: 900px; margin: 0 auto">
+        <h1 style="margin: 0 0 8px">Lore favorites</h1>
+        <p class="description" style="margin: 0 0 12px; color: #cfc">
+          A small, text-first collection of music and ambient pieces I like for
+          reading and lore work.
+        </p>
+        <p style="margin: 0 0 16px">
+          Inspired by
+          <span
+            id="scramble-hypno"
+            style="cursor: pointer; text-decoration: underline"
+            >Hypnospace Outlaw</span
+          >
+          — click the name if you dare.
+        </p>
+
+        <nav
+          style="
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+          "
+        >
+          <a href="./" class="hypno-link">Home</a>
+          <a href="portfolio.html" class="hypno-link">Portfolio</a>
+          <a href="Music.html" class="hypno-link">Music</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="content" role="main" style="padding-bottom: 1rem">
+      <div style="max-width: 900px; margin: 0 auto; text-align: left">
+        <h2 style="margin-top: 0">Shortlist</h2>
+        <p>
+          Below are a few tracks and notes I commonly use while reading or
+          working on lore.
+        </p>
+        <ul>
+          <li>
+            <strong>Hypnospace is Great</strong> — Jay Tholen (available in the
+            audio player below)
+          </li>
+          <li><strong>Ambient Drift</strong> — soft pads for long reads</li>
+          <li>
+            <strong>Instrumental Focus</strong> — light percussion, low
+            distraction
+          </li>
+        </ul>
+
+        <section style="margin-top: 1.25rem">
+          <h3>Notes</h3>
+          <p>
+            This page keeps things simple: no embedded videos. Use the
+            <a href="Music.html">Music</a> page for the randomizer and video
+            embeds.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bottom image slot copied from index layout -->
+    <div
+      class="bottom-image-slot"
+      style="
+        position: fixed;
+        right: 2vw;
+        bottom: 2vh;
+        z-index: 10001;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        pointer-events: auto;
+      "
+    >
+      <a href="Corrupted.html">
+        <img
+          src="assets/OIP__3_-removebg-preview.png"
+          alt="Bottom Slot Image"
+          style="
+            max-width: 220px;
+            max-height: 90px;
+            object-fit: contain;
+            box-shadow: 0 2px 8px #000a;
+            border-radius: 8px;
+          "
+        />
+      </a>
+    </div>
+
+    <!-- Bottom audio player (now static) -->
+    <div
+      id="music-player"
+      style="
+        position: static;
+        width: 100%;
+        background: #181818ee;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75em 1em;
+        box-shadow: 0 -2px 12px #000a;
+        font-family: inherit;
+        margin-top: 2rem;
+      "
+    >
+      <span
+        id="song-title"
+        style="
+          margin-right: 1em;
+          font-weight: bold;
+          font-size: 1em;
+          letter-spacing: 1px;
+        "
+        >Hypnospace is Great by Jay Tholen</span
+      >
+      <audio
+        id="audio-player"
+        src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 47 Hypnospace is Great.mp3"
+        controls
+        loop
+        style="width: 300px"
+      ></audio>
+    </div>
+
+    <script>
+      // set audio volume and try to play (silent fail if blocked)
+      const audio = document.getElementById("audio-player");
+      if (audio) {
+        audio.volume = 0.7;
+        audio.play && audio.play().catch(() => {});
+      }
+    </script>
+    <script>
+      // Permanent scramble all text on hidden Hypnospace Outlaw click (same behaviour as index)
+      function scrambleText(text) {
+        const chars =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{};:,.<>?";
+        return text
+          .split("")
+          .map((c) =>
+            c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]
+          )
+          .join("");
+      }
+      const scrambleEls = () =>
+        document.querySelectorAll(
+          "h1, h2, h3, h4, h5, h6, p, span, a, .status-bar, .status-text, .status-right"
+        );
+      const trigger = document.getElementById("scramble-hypno");
+      if (trigger) {
+        trigger.addEventListener("click", function () {
+          // Hide the trigger so it's secret
+          this.style.display = "none";
+          const els = scrambleEls();
+          els.forEach((el) => {
+            el.textContent = scrambleText(el.textContent);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Lore favorites</title>
+    <title>Favorite Characters from my Hobbies</title>
     <link rel="stylesheet" href="style.css" />
     <style>
       .content {
@@ -19,6 +19,119 @@
         text-align: center;
         color: #ddd;
         margin-bottom: 1.5rem;
+      }
+      /* Article-style layout */
+      .article {
+        max-width: 760px;
+        margin: 1.6rem auto 2.4rem;
+        padding: 2.2rem 1.2rem;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 8px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+        font-family: Georgia, "Times New Roman", Times, serif;
+        color: #e6efe6;
+        line-height: 1.7;
+      }
+      .article h1 {
+        font-family: "Merriweather", Georgia, serif;
+        font-size: 2rem;
+        margin-bottom: 0.2rem;
+      }
+      .article .byline {
+        color: #9fb89f;
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+      }
+      .article .lead {
+        font-size: 1.05rem;
+        color: #dfefe0;
+        margin-bottom: 1rem;
+      }
+      .article h2 {
+        font-family: inherit;
+        font-size: 1.25rem;
+        margin-top: 1.25rem;
+      }
+      .article ul {
+        margin-left: 1.25rem;
+      }
+      .article footer {
+        margin-top: 1.6rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.03);
+        padding-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .article footer audio {
+        width: 320px;
+        max-width: 100%;
+      }
+      @media (max-width: 720px) {
+        .article {
+          padding: 1.2rem;
+          margin: 1rem;
+        }
+        .article h1 {
+          font-size: 1.6rem;
+        }
+      }
+      /* Image grid and figure styles */
+      .image-grid {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .article-figure {
+        flex: 1 1 0;
+        background: rgba(0, 0, 0, 0.02);
+        padding: 0.6rem;
+        border-radius: 6px;
+      }
+      .figure-title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        color: #dfefe0;
+        font-weight: 700;
+      }
+      .article-figure img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        max-width: 300px;
+      }
+      .figure-caption {
+        margin-top: 0.5rem;
+        color: #bfc;
+        font-size: 0.95rem;
+      }
+      @media (max-width: 720px) {
+        .image-grid {
+          flex-direction: column;
+        }
+      }
+      .body-paragraph {
+        margin-top: 1rem;
+        color: #dfefe0;
+        font-size: 1rem;
+      }
+      /* Pop-in animation (used for headers, images, titles, body paragraph)
+         Extended to match site-wide timing/easing from `style.css` */
+      .pop-in {
+        opacity: 0;
+        transform: translateY(8px) scale(0.995);
+        transition: opacity 700ms cubic-bezier(0.68, -0.55, 0.27, 1.55),
+          transform 700ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        will-change: opacity, transform;
+      }
+      .pop-in.visible {
+        opacity: 1;
+        transform: none;
       }
     </style>
   </head>
@@ -39,19 +152,9 @@
       style="text-align: center; padding: 2rem 1rem 0"
     >
       <div style="max-width: 900px; margin: 0 auto">
-        <h1 style="margin: 0 0 8px">Lore favorites</h1>
+        <h1 style="margin: 0 0 8px">Favorite characters from my hobbies</h1>
         <p class="description" style="margin: 0 0 12px; color: #cfc">
-          A small, text-first collection of music and ambient pieces I like for
-          reading and lore work.
-        </p>
-        <p style="margin: 0 0 16px">
-          Inspired by
-          <span
-            id="scramble-hypno"
-            style="cursor: pointer; text-decoration: underline"
-            >Hypnospace Outlaw</span
-          >
-          — click the name if you dare.
+          This page includes images of and a short description of my favorite characters from the many hobbies i play and have interest in.
         </p>
 
         <nav
@@ -71,33 +174,132 @@
     </header>
 
     <main class="content" role="main" style="padding-bottom: 1rem">
-      <div style="max-width: 900px; margin: 0 auto; text-align: left">
-        <h2 style="margin-top: 0">Shortlist</h2>
-        <p>
-          Below are a few tracks and notes I commonly use while reading or
-          working on lore.
-        </p>
-        <ul>
-          <li>
-            <strong>Hypnospace is Great</strong> — Jay Tholen (available in the
-            audio player below)
-          </li>
-          <li><strong>Ambient Drift</strong> — soft pads for long reads</li>
-          <li>
-            <strong>Instrumental Focus</strong> — light percussion, low
-            distraction
-          </li>
-        </ul>
+      <article class="article" role="article" aria-labelledby="article-title">
+        <header>
+          <h1 id="article-title">Lore favorites</h1>
+        </header>
 
-        <section style="margin-top: 1.25rem">
-          <h3>Notes</h3>
-          <p>
-            This page keeps things simple: no embedded videos. Use the
-            <a href="Music.html">Music</a> page for the randomizer and video
-            embeds.
+        <section>
+          <h2>Shortlist</h2>
+          <ul>
+            <li><strong>The Changeling</strong> — Warhammer 40k & Warhammer Fantasy</li>
+            <li><strong>Vitrian Messinius</strong> — Warhammer 40k</li>
+            <li><strong>Sergeant Chronus</strong> — Warhammer 40k</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The Changeling</h2>
+          <div style="margin-top: 0.6rem">
+            <figure
+              class="article-figure"
+              style="padding: 0; background: transparent"
+            >
+              <div
+                class="figure-title"
+                style="margin: 0 0 0.6rem; font-size: 1.1rem"
+              >
+                Warhammer 40k & Warhammer Fantasy
+              </div>
+              <img
+                src="assets/The-Changeling.jpg"
+                alt="Feature image"
+                style="border-radius: 6px"
+              />
+            </figure>
+          </div>
+          <p class="body-paragraph">
+            The Changeling is an Daemonic Herald of the Chaos god Tzeentch from
+            the war game Warhammer. I particularly like the Changeling because
+            of the antics it gets up to in the many books and novels it is
+            included in. some of these schemes include:
+          </p>
+          <p class="body-paragraph">
+            - The time he snuck a trio of Nurglings onto the Skull Throne,
+            creating a hideous noise and an unholy mess the next time the Chaos
+            god Khorne sat down.
+          </p>
+          <p class="body-paragraph">
+            - In the guise of a lowly Gretchin, the Changeling made a few
+            alterations to Warboss Gitsmasha's favoured Megashoota -- a fact
+            that only became apparent when it next fired, blowing Gitsmasha and
+            his retinue of Nobz to tiny green pieces.
+          </p>
+          <p class="body-paragraph">
+            Source: https://warhammer40k.fandom.com/wiki/Changeling
           </p>
         </section>
-      </div>
+
+                <section>
+          <h2>Vitrian Messinius</h2>
+          <div style="margin-top: 0.6rem">
+            <figure
+              class="article-figure"
+              style="padding: 0; background: transparent"
+            >
+              <div
+                class="figure-title"
+                style="margin: 0 0 0.6rem; font-size: 1.1rem"
+              >
+                Warhammer 40k
+              </div>
+              <img
+                src="assets/Messinius.webp"
+                alt="Feature image"
+                style="border-radius: 6px"
+              />
+            </figure>
+          </div>
+          <p class="body-paragraph">
+            Vitrian Messinius is the current Warden of the Nephilim sector and was given said role to protect what the Primarch Roboute Guilleman had previously reconquered during the many crusades after Guilleman's return. He also holds the position of Captain in his home Chapter, the White Consuls.
+          </p>
+          <p class="body-paragraph">
+            Source: https://task-force-xv.fandom.com/wiki/Captain_Vitrian_Messinius
+          </p>
+        </section>
+
+                <section>
+          <h2>Sergeant Chronus</h2>
+          <div style="margin-top: 0.6rem">
+            <figure
+              class="article-figure"
+              style="padding: 0; background: transparent"
+            >
+              <div
+                class="figure-title"
+                style="margin: 0 0 0.6rem; font-size: 1.1rem"
+              >
+                Warhammer 40k
+              </div>
+              <img
+                src="assets/Chronus.jpg"
+                alt="Feature image"
+                style="border-radius: 6px"
+              />
+            </figure>
+          </div>
+          <p class="body-paragraph">
+          Chronus is a Tank commander of the Ultramarines Chapter and currently holds the title of "Spear of Macragge", and currently answers only and directly to the Primarch Roboute Guilleman and the Chapter Master Marneus Calgar.  
+          </p>
+          <p class="body-paragraph">
+            Source: https://warhammer40k.fandom.com/wiki/Antaro_Chronus
+          </p>
+        </section>
+
+        <footer>
+          <div style="flex: 1">
+            <strong id="song-title">Hypnospace is Great by Jay Tholen</strong>
+            <div style="font-size: 0.9rem; color: #bfc">
+            </div>
+          </div>
+          <audio
+            id="audio-player"
+            src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 47 Hypnospace is Great.mp3"
+            controls
+            loop
+          ></audio>
+        </footer>
+      </article>
     </main>
 
     <!-- Bottom image slot copied from index layout -->
@@ -129,45 +331,49 @@
       </a>
     </div>
 
-    <!-- Bottom audio player (now static) -->
-    <div
-      id="music-player"
-      style="
-        position: static;
-        width: 100%;
-        background: #181818ee;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.75em 1em;
-        box-shadow: 0 -2px 12px #000a;
-        font-family: inherit;
-        margin-top: 2rem;
-      "
-    >
-      <span
-        id="song-title"
-        style="
-          margin-right: 1em;
-          font-weight: bold;
-          font-size: 1em;
-          letter-spacing: 1px;
-        "
-        >Hypnospace is Great by Jay Tholen</span
-      >
-      <audio
-        id="audio-player"
-        src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 47 Hypnospace is Great.mp3"
-        controls
-        loop
-        style="width: 300px"
-      ></audio>
-    </div>
+    <!-- audio player moved into article footer -->
 
     <script>
+      // Pop-in: grouped staggered reveal for everything on the page.
+      // Each selector group has its own base delay and per-item step
+      // so elements pop in at separate times.
+      document.addEventListener('DOMContentLoaded', function () {
+        const groups = [
+          { sel: '#status-bar-container', base: 80, step: 0 },
+          { sel: '.main-header h1', base: 160, step: 140 },
+          { sel: '.description', base: 220, step: 60 },
+          { sel: '.main-header nav, .main-header .hypno-link', base: 260, step: 80 },
+          { sel: '.article h1', base: 340, step: 120 },
+          { sel: '.article .byline', base: 420, step: 80 },
+          { sel: '.article .lead', base: 460, step: 80 },
+          { sel: '.article h2', base: 520, step: 80 },
+          { sel: '.article ul li', base: 560, step: 70 },
+          { sel: '.figure-title', base: 400, step: 120 },
+          { sel: '.article-figure img', base: 440, step: 120 },
+          { sel: '.body-paragraph', base: 620, step: 90 },
+          { sel: 'article footer', base: 760, step: 0 },
+          { sel: '.bottom-image-slot', base: 900, step: 0 }
+        ];
+
+        groups.forEach((g) => {
+          const nodes = Array.from(document.querySelectorAll(g.sel));
+          nodes.forEach((n) => n.classList.add('pop-in'));
+
+          nodes.forEach((n, idx) => {
+            const delay = (g.base || 0) + (idx * (g.step || 0));
+            if (n.tagName === 'IMG') {
+              const img = n;
+              const show = () => setTimeout(() => img.classList.add('visible'), delay);
+              if (img.complete) show(); else img.addEventListener('load', show);
+            } else {
+              setTimeout(() => n.classList.add('visible'), delay);
+            }
+          });
+        });
+      });
+
       // set audio volume and try to play (silent fail if blocked)
-      const audio = document.getElementById("audio-player");
+      const audio = document.getElementById('audio-player');
       if (audio) {
         audio.volume = 0.7;
         audio.play && audio.play().catch(() => {});

@@ -154,7 +154,8 @@
       <div style="max-width: 900px; margin: 0 auto">
         <h1 style="margin: 0 0 8px">Favorite characters from my hobbies</h1>
         <p class="description" style="margin: 0 0 12px; color: #cfc">
-          This page includes images of and a short description of my favorite characters from the many hobbies i play and have interest in.
+          This page includes images of and a short description of my favorite
+          characters from the many hobbies i play and have interest in.
         </p>
 
         <nav
@@ -182,7 +183,10 @@
         <section>
           <h2>Shortlist</h2>
           <ul>
-            <li><strong>The Changeling</strong> — Warhammer 40k & Warhammer Fantasy</li>
+            <li>
+              <strong>The Changeling</strong> — Warhammer 40k & Warhammer
+              Fantasy
+            </li>
             <li><strong>Vitrian Messinius</strong> — Warhammer 40k</li>
             <li><strong>Sergeant Chronus</strong> — Warhammer 40k</li>
           </ul>
@@ -230,7 +234,7 @@
           </p>
         </section>
 
-                <section>
+        <section>
           <h2>Vitrian Messinius</h2>
           <div style="margin-top: 0.6rem">
             <figure
@@ -251,14 +255,19 @@
             </figure>
           </div>
           <p class="body-paragraph">
-            Vitrian Messinius is the current Warden of the Nephilim sector and was given said role to protect what the Primarch Roboute Guilleman had previously reconquered during the many crusades after Guilleman's return. He also holds the position of Captain in his home Chapter, the White Consuls.
+            Vitrian Messinius is the current Warden of the Nephilim sector and
+            was given said role to protect what the Primarch Roboute Guilleman
+            had previously reconquered during the many crusades after
+            Guilleman's return. He also holds the position of Captain in his
+            home Chapter, the White Consuls.
           </p>
           <p class="body-paragraph">
-            Source: https://task-force-xv.fandom.com/wiki/Captain_Vitrian_Messinius
+            Source:
+            https://task-force-xv.fandom.com/wiki/Captain_Vitrian_Messinius
           </p>
         </section>
 
-                <section>
+        <section>
           <h2>Sergeant Chronus</h2>
           <div style="margin-top: 0.6rem">
             <figure
@@ -279,7 +288,10 @@
             </figure>
           </div>
           <p class="body-paragraph">
-          Chronus is a Tank commander of the Ultramarines Chapter and currently holds the title of "Spear of Macragge", and currently answers only and directly to the Primarch Roboute Guilleman and the Chapter Master Marneus Calgar.  
+            Chronus is a Tank commander of the Ultramarines Chapter and
+            currently holds the title of "Spear of Macragge", and currently
+            answers only and directly to the Primarch Roboute Guilleman and the
+            Chapter Master Marneus Calgar.
           </p>
           <p class="body-paragraph">
             Source: https://warhammer40k.fandom.com/wiki/Antaro_Chronus
@@ -289,8 +301,7 @@
         <footer>
           <div style="flex: 1">
             <strong id="song-title">Hypnospace is Great by Jay Tholen</strong>
-            <div style="font-size: 0.9rem; color: #bfc">
-            </div>
+            <div style="font-size: 0.9rem; color: #bfc"></div>
           </div>
           <audio
             id="audio-player"
@@ -337,43 +348,49 @@
       // Pop-in: grouped staggered reveal for everything on the page.
       // Each selector group has its own base delay and per-item step
       // so elements pop in at separate times.
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener("DOMContentLoaded", function () {
         const groups = [
-          { sel: '#status-bar-container', base: 80, step: 0 },
-          { sel: '.main-header h1', base: 160, step: 140 },
-          { sel: '.description', base: 220, step: 60 },
-          { sel: '.main-header nav, .main-header .hypno-link', base: 260, step: 80 },
-          { sel: '.article h1', base: 340, step: 120 },
-          { sel: '.article .byline', base: 420, step: 80 },
-          { sel: '.article .lead', base: 460, step: 80 },
-          { sel: '.article h2', base: 520, step: 80 },
-          { sel: '.article ul li', base: 560, step: 70 },
-          { sel: '.figure-title', base: 400, step: 120 },
-          { sel: '.article-figure img', base: 440, step: 120 },
-          { sel: '.body-paragraph', base: 620, step: 90 },
-          { sel: 'article footer', base: 760, step: 0 },
-          { sel: '.bottom-image-slot', base: 900, step: 0 }
+          { sel: "#status-bar-container", base: 80, step: 0 },
+          { sel: ".main-header h1", base: 160, step: 140 },
+          { sel: ".description", base: 220, step: 60 },
+          {
+            sel: ".main-header nav, .main-header .hypno-link",
+            base: 260,
+            step: 80,
+          },
+          { sel: ".article h1", base: 340, step: 120 },
+          { sel: ".article .byline", base: 420, step: 80 },
+          { sel: ".article .lead", base: 460, step: 80 },
+          { sel: ".article h2", base: 520, step: 80 },
+          { sel: ".article ul li", base: 560, step: 70 },
+          { sel: ".figure-title", base: 400, step: 120 },
+          { sel: ".article-figure img", base: 440, step: 120 },
+          { sel: ".body-paragraph", base: 620, step: 90 },
+          { sel: "article footer", base: 760, step: 0 },
+          { sel: ".bottom-image-slot", base: 900, step: 0 },
         ];
 
         groups.forEach((g) => {
           const nodes = Array.from(document.querySelectorAll(g.sel));
-          nodes.forEach((n) => n.classList.add('pop-in'));
+          nodes.forEach((n) => n.classList.add("pop-in"));
 
           nodes.forEach((n, idx) => {
-            const delay = (g.base || 0) + (idx * (g.step || 0));
-            if (n.tagName === 'IMG') {
+            const delay = (g.base || 0) + idx * (g.step || 0);
+            if (n.tagName === "IMG") {
               const img = n;
-              const show = () => setTimeout(() => img.classList.add('visible'), delay);
-              if (img.complete) show(); else img.addEventListener('load', show);
+              const show = () =>
+                setTimeout(() => img.classList.add("visible"), delay);
+              if (img.complete) show();
+              else img.addEventListener("load", show);
             } else {
-              setTimeout(() => n.classList.add('visible'), delay);
+              setTimeout(() => n.classList.add("visible"), delay);
             }
           });
         });
       });
 
       // set audio volume and try to play (silent fail if blocked)
-      const audio = document.getElementById('audio-player');
+      const audio = document.getElementById("audio-player");
       if (audio) {
         audio.volume = 0.7;
         audio.play && audio.play().catch(() => {});

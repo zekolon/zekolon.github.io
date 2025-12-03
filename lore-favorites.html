@@ -9,51 +9,7 @@
       .content {
         max-width: 1000px;
         margin: 2rem auto;
-        padding: 0 1rem;
-      }
-      .hero {
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-      .description {
-        text-align: center;
-        color: #ddd;
-        margin-bottom: 1.5rem;
-      }
-      /* Article-style layout */
-      .article {
-        max-width: 760px;
-        margin: 1.6rem auto 2.4rem;
-        padding: 2.2rem 1.2rem;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.02),
-          rgba(255, 255, 255, 0.01)
-        );
-        border-radius: 8px;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-        font-family: Georgia, "Times New Roman", Times, serif;
-        color: #e6efe6;
-        line-height: 1.7;
-      }
-      .article h1 {
-        font-family: "Merriweather", Georgia, serif;
-        font-size: 2rem;
-        margin-bottom: 0.2rem;
-      }
-      .article .byline {
-        color: #9fb89f;
-        margin-bottom: 0.8rem;
-        font-size: 0.95rem;
-      }
-      .article .lead {
-        font-size: 1.05rem;
-        color: #dfefe0;
-        margin-bottom: 1rem;
-      }
-      .article h2 {
-        font-family: inherit;
-        font-size: 1.25rem;
+
         margin-top: 1.25rem;
       }
       .article ul {
@@ -146,40 +102,62 @@
         })
         .catch(() => {});
     </script>
-    <!-- Main header and content -->
-    <header
-      class="main-header"
-      style="text-align: center; padding: 2rem 1rem 0"
-    >
-      <div style="max-width: 900px; margin: 0 auto">
-        <h1 style="margin: 0 0 8px">Favorite characters from my hobbies</h1>
-        <p class="description" style="margin: 0 0 12px; color: #cfc">
-          This page includes images of and a short description of my favorite
-          characters from the many hobbies i play and have interest in.
-        </p>
+    <!-- Main header moved into main-content so background covers it -->
 
-        <nav
-          style="
-            display: flex;
-            gap: 0.6rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-          "
-        >
-          <a href="./" class="hypno-link">Home</a>
-          <a href="portfolio.html" class="hypno-link">Portfolio</a>
-          <a href="Music.html" class="hypno-link">Music</a>
-        </nav>
-      </div>
-    </header>
+    <main class="main-content content" role="main" style="padding-bottom: 1rem">
+      <header class="main-header" style="padding: 1.6rem 1rem 0">
+        <div style="max-width: 900px; margin: 0 auto">
+          <div style="display: flex; align-items: center; gap: 1.2rem">
+            <!-- Left vertical nav next to the title -->
+            <nav
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                min-width: 140px;
+              "
+            >
+              <a href="./" class="hypno-link" style="padding: 0.4em 0.8em"
+                >Home</a
+              >
+              <a
+                href="portfolio.html"
+                class="hypno-link"
+                style="padding: 0.4em 0.8em"
+                >Portfolio</a
+              >
+              <a
+                href="Gallery.html"
+                class="hypno-link"
+                style="padding: 0.4em 0.8em"
+                >Gallery</a
+              >
+              <a
+                href="Music.html"
+                class="hypno-link"
+                style="padding: 0.4em 0.8em"
+                >Music</a
+              >
+            </nav>
 
-    <main class="content" role="main" style="padding-bottom: 1rem">
+            <div style="flex: 1">
+              <h1 style="margin: 0 0 8px; text-align: left">
+                Favorite characters from my hobbies
+              </h1>
+              <p
+                class="description"
+                style="margin: 0 0 12px; color: #cfc; text-align: left"
+              >
+                This page includes images of and a short description of my
+                favorite characters from the many hobbies i play and have
+                interest in.
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
       <article class="article" role="article" aria-labelledby="article-title">
-        <header>
-          <h1 id="article-title">Lore favorites</h1>
-        </header>
-
         <section>
           <h2>Shortlist</h2>
           <ul>
@@ -298,6 +276,37 @@
           </p>
         </section>
 
+        <section>
+          <h2>Isildur</h2>
+          <div style="margin-top: 0.6rem">
+            <figure
+              class="article-figure"
+              style="padding: 0; background: transparent"
+            >
+              <div
+                class="figure-title"
+                style="margin: 0 0 0.6rem; font-size: 1.1rem"
+              >
+                Lord of the Rings & Middle Earth stratagy board game
+              </div>
+              <img
+                src="assets/image.png"
+                alt="Feature image"
+                style="border-radius: 6px"
+              />
+            </figure>
+          </div>
+          <p class="body-paragraph">
+            Isildur is the eldest son of Elendil and the Former King of Gondor,
+            he was the one who struck down Sauron, but at the same time refused
+            to destroy the One Ring and eventually its will betrayed him leading
+            to his death.
+          </p>
+          <p class="body-paragraph">
+            Source: https://lotr.fandom.com/wiki/Isildur
+          </p>
+        </section>
+
         <footer>
           <div style="flex: 1">
             <strong id="song-title">Hypnospace is Great by Jay Tholen</strong>
@@ -345,48 +354,69 @@
     <!-- audio player moved into article footer -->
 
     <script>
-      // Pop-in: grouped staggered reveal for everything on the page.
-      // Each selector group has its own base delay and per-item step
-      // so elements pop in at separate times.
+      // Pop-in on scroll: reveal elements as they enter the viewport.
       document.addEventListener("DOMContentLoaded", function () {
         const groups = [
-          { sel: "#status-bar-container", base: 80, step: 0 },
-          { sel: ".main-header h1", base: 160, step: 140 },
-          { sel: ".description", base: 220, step: 60 },
-          {
-            sel: ".main-header nav, .main-header .hypno-link",
-            base: 260,
-            step: 80,
-          },
-          { sel: ".article h1", base: 340, step: 120 },
-          { sel: ".article .byline", base: 420, step: 80 },
-          { sel: ".article .lead", base: 460, step: 80 },
-          { sel: ".article h2", base: 520, step: 80 },
-          { sel: ".article ul li", base: 560, step: 70 },
-          { sel: ".figure-title", base: 400, step: 120 },
-          { sel: ".article-figure img", base: 440, step: 120 },
-          { sel: ".body-paragraph", base: 620, step: 90 },
-          { sel: "article footer", base: 760, step: 0 },
-          { sel: ".bottom-image-slot", base: 900, step: 0 },
+          { sel: "#status-bar-container", step: 0 },
+          { sel: ".main-header h1", step: 60 },
+          { sel: ".description", step: 40 },
+          { sel: ".main-header nav, .main-header .hypno-link", step: 60 },
+          { sel: ".article h1", step: 80 },
+          { sel: ".article .byline", step: 40 },
+          { sel: ".article .lead", step: 40 },
+          { sel: ".article h2", step: 50 },
+          { sel: ".article ul li", step: 40 },
+          { sel: ".figure-title", step: 60 },
+          { sel: ".article-figure img", step: 60 },
+          { sel: ".body-paragraph", step: 50 },
+          { sel: "article footer", step: 0 },
+          { sel: ".bottom-image-slot", step: 0 },
         ];
 
+        const nodesWithDelay = [];
         groups.forEach((g) => {
           const nodes = Array.from(document.querySelectorAll(g.sel));
-          nodes.forEach((n) => n.classList.add("pop-in"));
-
           nodes.forEach((n, idx) => {
-            const delay = (g.base || 0) + idx * (g.step || 0);
-            if (n.tagName === "IMG") {
-              const img = n;
-              const show = () =>
-                setTimeout(() => img.classList.add("visible"), delay);
-              if (img.complete) show();
-              else img.addEventListener("load", show);
-            } else {
-              setTimeout(() => n.classList.add("visible"), delay);
-            }
+            n.classList.add("pop-in");
+            const delay = Math.min(600, idx * (g.step || 40));
+            n.dataset.popDelay = String(delay);
+            nodesWithDelay.push(n);
           });
         });
+
+        if (!("IntersectionObserver" in window)) {
+          nodesWithDelay.forEach((n, i) =>
+            setTimeout(() => n.classList.add("visible"), i * 60)
+          );
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            // Only reveal intersecting entries; sort by vertical position so
+            // items are revealed top-to-bottom. Stagger reveals so they don't
+            // all become visible at once when many items intersect together.
+            const intersecting = entries
+              .filter((e) => e.isIntersecting)
+              .sort(
+                (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+              );
+            intersecting.forEach((entry, idx) => {
+              const el = entry.target;
+              const base = Number(el.dataset.popDelay) || 0;
+              const stagger = idx * 80; // 80ms between items
+              const jitter = Math.floor(Math.random() * 60);
+              setTimeout(
+                () => el.classList.add("visible"),
+                base + stagger + jitter
+              );
+              obs.unobserve(el);
+            });
+          },
+          { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.08 }
+        );
+
+        nodesWithDelay.forEach((n) => observer.observe(n));
       });
 
       // set audio volume and try to play (silent fail if blocked)

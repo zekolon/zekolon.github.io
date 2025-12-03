@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Games</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="status-bar-container"></div>
+  <script>
+    // Dynamically load the shared status bar
+    fetch('status-bar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('status-bar-container').innerHTML = html;
+      });
+  </script>
+   <div class="main-content" style="display: flex; flex-direction: row; align-items: flex-start;">
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+        <h1>Games</h1>
+        <p style="text-align: center;">
+          This page contains links to games from websites i enjoy.
+        </p>
+    <a href="index.html" class="hypno-link" style="position: absolute; top: 1em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Home</a>
+    <a href="portfolio.html" class="hypno-link" style="position: absolute; top: 3.2em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Portfolio</a>
+    <a href="Music.html" class="hypno-link" style="position: absolute; top: 5.4em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Music</a>
+        <a href="lore-favorites.html" class="hypno-link" style="position: absolute; top: 7.6em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Favorite Characters</a>
+        <!-- Game iframe grid: 3 placeholder slots, add your own src URLs -->
+        <div id="games-grid" style="display: flex; justify-content: center; gap: 2em; margin: 2em 0; flex-wrap: wrap;">
+          <div style="width: 340px; height: 220px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; align-items: center; justify-content: center;">
+            <iframe src="https://archive.org/details/hulkcd_202201" title="Game 1" width="320" height="200" style="border: none; background: #222; border-radius: 8px;" allowfullscreen></iframe>
+          </div>
+          <div style="width: 340px; height: 220px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; align-items: center; justify-content: center;">
+            <iframe src="" title="Game 2" width="320" height="200" style="border: none; background: #222; border-radius: 8px;" allowfullscreen="true" allow="fullscreen; gamepad; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" ></iframe>
+          </div>
+          <div style="width: 340px; height: 220px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; align-items: center; justify-content: center;">
+            <iframe src="" title="Game 3" width="320" height="200" style="border: none; background: #222; border-radius: 8px;" allowfullscreen="true" allow="fullscreen; gamepad; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" ></iframe>
+          </div>
+        </div>
+        <!-- Pets Section below hobby gallery -->
+
+      </div>
+  <!-- Rain effect removed -->
+    <div
+      class="bottom-image-slot"
+      style="
+        position: fixed;
+        right: 2vw;
+        bottom: 2vh;
+        z-index: 10001;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        pointer-events: auto;
+      "
+    >
+      <a href="Corrupted.html">
+        <img
+          src="assets/OIP__3_-removebg-preview.png"
+          alt="Bottom Slot Image"
+          style="
+            max-width: 220px;
+            max-height: 90px;
+            object-fit: contain;
+            box-shadow: 0 2px 8px #000a;
+            border-radius: 8px;
+          "
+        />
+      </a>
+    </div>
+  </body>
+  <script>
+    // Rain effect removed
+    // Gallery image switching logic for Warhammer
+    const galleryImages = [
+  'assets/0719251700.jpg',
+  'assets/0723251544.jpg',
+  'assets/0723251550.jpg',
+  'assets/0727252158.jpg',
+  'assets/0813250439.jpg',
+    ];
+    let currentImg = 0;
+    const mainImg = document.getElementById('main-img');
+    const prevBtn = document.getElementById('prev-img');
+    const nextBtn = document.getElementById('next-img');
+
+    function updateMainImg() {
+  mainImg.classList.remove('pop-in-img');
+  // Force reflow to restart animation
+  void mainImg.offsetWidth;
+  mainImg.src = galleryImages[currentImg];
+  mainImg.classList.add('pop-in-img');
+    }
+    prevBtn.addEventListener('click', () => {
+      currentImg = (currentImg - 1 + galleryImages.length) % galleryImages.length;
+      updateMainImg();
+    });
+    nextBtn.addEventListener('click', () => {
+      currentImg = (currentImg + 1) % galleryImages.length;
+      updateMainImg();
+    });
+
+    // Gallery image switching logic for Pets
+    const petsGalleryImages = [
+      'assets/0114251523a.jpg',
+      'assets/0115241441.jpg',
+      'assets/1007241637f~2.jpg',
+      'assets/0721252021.jpg'
+
+    ];
+    let currentImgPets = 0;
+    const mainImgPets = document.getElementById('main-img-pets');
+    const prevBtnPets = document.getElementById('prev-img-pets');
+    const nextBtnPets = document.getElementById('next-img-pets');
+
+    function updateMainImgPets() {
+  mainImgPets.classList.remove('pop-in-img');
+  void mainImgPets.offsetWidth;
+  mainImgPets.src = petsGalleryImages[currentImgPets];
+  mainImgPets.classList.add('pop-in-img');
+    }
+    prevBtnPets.addEventListener('click', () => {
+      currentImgPets = (currentImgPets - 1 + petsGalleryImages.length) % petsGalleryImages.length;
+      updateMainImgPets();
+    });
+    nextBtnPets.addEventListener('click', () => {
+      currentImgPets = (currentImgPets + 1) % petsGalleryImages.length;
+      updateMainImgPets();
+    });
+  </script>
+  <script>
+// Highlight gallery image when shown in picture slot
+(function() {
+  const mainImg = document.getElementById('main-img');
+  const galleryGrid = document.getElementById('gallery-grid');
+  if (mainImg && galleryGrid) {
+    function highlightCurrent() {
+      const gridImgs = galleryGrid.querySelectorAll('img');
+      gridImgs.forEach(img => {
+        if (img.src === mainImg.src || img.getAttribute('src') === mainImg.getAttribute('src')) {
+          img.style.outline = '4px solid #fff';
+          img.style.boxShadow = '0 0 16px #fff, 0 4px 24px #000a';
+          img.style.zIndex = 2;
+        } else {
+          img.style.outline = '';
+          img.style.boxShadow = '';
+          img.style.zIndex = '';
+        }
+      });
+    }
+    mainImg.addEventListener('load', highlightCurrent);
+    highlightCurrent();
+  }
+
+  // Pets gallery highlight
+  const mainImgPets = document.getElementById('main-img-pets');
+  const galleryGridPets = document.getElementById('gallery-grid-pets');
+  if (mainImgPets && galleryGridPets) {
+    function highlightCurrentPets() {
+      const gridImgs = galleryGridPets.querySelectorAll('img');
+      gridImgs.forEach(img => {
+        if (img.src === mainImgPets.src || img.getAttribute('src') === mainImgPets.getAttribute('src')) {
+          img.style.outline = '4px solid #fff';
+          img.style.boxShadow = '0 0 16px #fff, 0 4px 24px #000a';
+          img.style.zIndex = 2;
+        } else {
+          img.style.outline = '';
+          img.style.boxShadow = '';
+          img.style.zIndex = '';
+        }
+      });
+    }
+    mainImgPets.addEventListener('load', highlightCurrentPets);
+    highlightCurrentPets();
+  }
+})();
+</script>
+<!-- Music Player -->
+<div
+  id="music-player"
+  style="
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    background: #181818ee;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em 1em;
+    z-index: 9999;
+    box-shadow: 0 -2px 12px #000a;
+    font-family: inherit;
+  "
+>
+  <span
+    id="song-title"
+    style="
+      margin-right: 1em;
+      font-weight: bold;
+      font-size: 1em;
+      letter-spacing: 1px;
+    "
+    >Dimensional Voyager by Jay Tholen</span
+  >
+  <audio
+    id="audio-player"
+    src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 10 Dimensional Voyager.mp3"
+    autoplay
+    controls
+    loop
+    style="width: 300px"
+  ></audio>
+</div>
+<script>
+  // Ensure autoplay works and show song title
+  const audio = document.getElementById("audio-player");
+  audio.volume = 0.7;
+  audio.play().catch(() => {});
+  // Optionally, update song title dynamically if you want to change tracks
+</script>
+</html>

@@ -28,8 +28,9 @@
         <a href="lore-favorites.html" class="hypno-link" style="position: absolute; top: 7.6em; left: 1em; z-index: 10; font-size: 1.1em;">&larr; Favorite Characters</a>
         <!-- Game iframe grid: 3 placeholder slots, add your own src URLs -->
         <div id="games-grid" style="display: flex; justify-content: center; gap: 2em; margin: 2em 0; flex-wrap: wrap;">
-          <div style="width: 340px; height: 220px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-            <iframe src="https://archive.org/embed/hulkcd_202201" title="Space Hulk" width="320" height="200" style="border: none; background: #222; border-radius: 8px;" allowfullscreen="true" allow="fullscreen; gamepad; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"></iframe>
+          <div style="width: 700px; height: 500px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow: hidden; position: relative;">
+            <button id="fullscreen-btn" style="position: absolute; top: 8px; right: 8px; z-index: 100; padding: 8px 16px; background: #7fffd4; color: #181818; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9em;">Fullscreen</button>
+            <iframe id="space-hulk-iframe" src="https://archive.org/embed/hulkcd_202201" title="Space Hulk" width="680" height="480" style="border: none; background: #222; border-radius: 8px; margin-top: 32px;" allowfullscreen="true" allow="fullscreen; gamepad; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"></iframe>
           </div>
           <div style="width: 340px; height: 220px; background: #181f2a; border-radius: 12px; box-shadow: 0 4px 24px #000a; display: flex; align-items: center; justify-content: center;">
             <iframe src="" title="Game 2" width="320" height="200" style="border: none; background: #222; border-radius: 8px;" allowfullscreen="true" allow="fullscreen; gamepad; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" ></iframe>
@@ -216,6 +217,22 @@
   ></audio>
 </div>
 <script>
+  // Fullscreen button for Space Hulk iframe
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
+  const spaceHulkIframe = document.getElementById('space-hulk-iframe');
+  
+  fullscreenBtn.addEventListener('click', () => {
+    if (spaceHulkIframe.requestFullscreen) {
+      spaceHulkIframe.requestFullscreen();
+    } else if (spaceHulkIframe.webkitRequestFullscreen) {
+      spaceHulkIframe.webkitRequestFullscreen();
+    } else if (spaceHulkIframe.mozRequestFullScreen) {
+      spaceHulkIframe.mozRequestFullScreen();
+    } else if (spaceHulkIframe.msRequestFullscreen) {
+      spaceHulkIframe.msRequestFullscreen();
+    }
+  });
+
   // Ensure autoplay works and show song title
   const audio = document.getElementById("audio-player");
   audio.volume = 0.7;

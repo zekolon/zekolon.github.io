@@ -70,173 +70,66 @@
         />
       </a>
     </div>
+  <!-- Music Player -->
+  <div
+    id="music-player"
+    style="
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      background: #181818ee;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5em 1em;
+      z-index: 9999;
+      box-shadow: 0 -2px 12px #000a;
+      font-family: inherit;
+    "
+  >
+    <span
+      id="song-title"
+      style="
+        margin-right: 1em;
+        font-weight: bold;
+        font-size: 1em;
+        letter-spacing: 1px;
+      "
+      >Dimensional Voyager by Jay Tholen</span
+    >
+    <audio
+      id="audio-player"
+      src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 10 Dimensional Voyager.mp3"
+      autoplay
+      controls
+      loop
+      style="width: 300px"
+    ></audio>
+  </div>
   </body>
   <script>
-    // Rain effect removed
-    // Gallery image switching logic for Warhammer
-    const galleryImages = [
-  'assets/0719251700.jpg',
-  'assets/0723251544.jpg',
-  'assets/0723251550.jpg',
-  'assets/0727252158.jpg',
-  'assets/0813250439.jpg',
-    ];
-    let currentImg = 0;
-    const mainImg = document.getElementById('main-img');
-    const prevBtn = document.getElementById('prev-img');
-    const nextBtn = document.getElementById('next-img');
-
-    function updateMainImg() {
-  mainImg.classList.remove('pop-in-img');
-  // Force reflow to restart animation
-  void mainImg.offsetWidth;
-  mainImg.src = galleryImages[currentImg];
-  mainImg.classList.add('pop-in-img');
-    }
-    prevBtn.addEventListener('click', () => {
-      currentImg = (currentImg - 1 + galleryImages.length) % galleryImages.length;
-      updateMainImg();
-    });
-    nextBtn.addEventListener('click', () => {
-      currentImg = (currentImg + 1) % galleryImages.length;
-      updateMainImg();
+    // Fullscreen button for Space Hulk iframe
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const spaceHulkIframe = document.getElementById('space-hulk-iframe');
+    
+    fullscreenBtn.addEventListener('click', () => {
+      if (spaceHulkIframe.requestFullscreen) {
+        spaceHulkIframe.requestFullscreen();
+      } else if (spaceHulkIframe.webkitRequestFullscreen) {
+        spaceHulkIframe.webkitRequestFullscreen();
+      } else if (spaceHulkIframe.mozRequestFullScreen) {
+        spaceHulkIframe.mozRequestFullScreen();
+      } else if (spaceHulkIframe.msRequestFullscreen) {
+        spaceHulkIframe.msRequestFullscreen();
+      }
     });
 
-    // Gallery image switching logic for Pets
-    const petsGalleryImages = [
-      'assets/0114251523a.jpg',
-      'assets/0115241441.jpg',
-      'assets/1007241637f~2.jpg',
-      'assets/0721252021.jpg'
-
-    ];
-    let currentImgPets = 0;
-    const mainImgPets = document.getElementById('main-img-pets');
-    const prevBtnPets = document.getElementById('prev-img-pets');
-    const nextBtnPets = document.getElementById('next-img-pets');
-
-    function updateMainImgPets() {
-  mainImgPets.classList.remove('pop-in-img');
-  void mainImgPets.offsetWidth;
-  mainImgPets.src = petsGalleryImages[currentImgPets];
-  mainImgPets.classList.add('pop-in-img');
-    }
-    prevBtnPets.addEventListener('click', () => {
-      currentImgPets = (currentImgPets - 1 + petsGalleryImages.length) % petsGalleryImages.length;
-      updateMainImgPets();
-    });
-    nextBtnPets.addEventListener('click', () => {
-      currentImgPets = (currentImgPets + 1) % petsGalleryImages.length;
-      updateMainImgPets();
-    });
+    // Ensure autoplay works and show song title
+    const audio = document.getElementById("audio-player");
+    audio.volume = 0.7;
+    audio.play().catch(() => {});
   </script>
-  <script>
-// Highlight gallery image when shown in picture slot
-(function() {
-  const mainImg = document.getElementById('main-img');
-  const galleryGrid = document.getElementById('gallery-grid');
-  if (mainImg && galleryGrid) {
-    function highlightCurrent() {
-      const gridImgs = galleryGrid.querySelectorAll('img');
-      gridImgs.forEach(img => {
-        if (img.src === mainImg.src || img.getAttribute('src') === mainImg.getAttribute('src')) {
-          img.style.outline = '4px solid #fff';
-          img.style.boxShadow = '0 0 16px #fff, 0 4px 24px #000a';
-          img.style.zIndex = 2;
-        } else {
-          img.style.outline = '';
-          img.style.boxShadow = '';
-          img.style.zIndex = '';
-        }
-      });
-    }
-    mainImg.addEventListener('load', highlightCurrent);
-    highlightCurrent();
-  }
-
-  // Pets gallery highlight
-  const mainImgPets = document.getElementById('main-img-pets');
-  const galleryGridPets = document.getElementById('gallery-grid-pets');
-  if (mainImgPets && galleryGridPets) {
-    function highlightCurrentPets() {
-      const gridImgs = galleryGridPets.querySelectorAll('img');
-      gridImgs.forEach(img => {
-        if (img.src === mainImgPets.src || img.getAttribute('src') === mainImgPets.getAttribute('src')) {
-          img.style.outline = '4px solid #fff';
-          img.style.boxShadow = '0 0 16px #fff, 0 4px 24px #000a';
-          img.style.zIndex = 2;
-        } else {
-          img.style.outline = '';
-          img.style.boxShadow = '';
-          img.style.zIndex = '';
-        }
-      });
-    }
-    mainImgPets.addEventListener('load', highlightCurrentPets);
-    highlightCurrentPets();
-  }
-})();
-</script>
-<!-- Music Player -->
-<div
-  id="music-player"
-  style="
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    background: #181818ee;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5em 1em;
-    z-index: 9999;
-    box-shadow: 0 -2px 12px #000a;
-    font-family: inherit;
-  "
->
-  <span
-    id="song-title"
-    style="
-      margin-right: 1em;
-      font-weight: bold;
-      font-size: 1em;
-      letter-spacing: 1px;
-    "
-    >Dimensional Voyager by Jay Tholen</span
-  >
-  <audio
-    id="audio-player"
-    src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 10 Dimensional Voyager.mp3"
-    autoplay
-    controls
-    loop
-    style="width: 300px"
-  ></audio>
-</div>
-<script>
-  // Fullscreen button for Space Hulk iframe
-  const fullscreenBtn = document.getElementById('fullscreen-btn');
-  const spaceHulkIframe = document.getElementById('space-hulk-iframe');
-  
-  fullscreenBtn.addEventListener('click', () => {
-    if (spaceHulkIframe.requestFullscreen) {
-      spaceHulkIframe.requestFullscreen();
-    } else if (spaceHulkIframe.webkitRequestFullscreen) {
-      spaceHulkIframe.webkitRequestFullscreen();
-    } else if (spaceHulkIframe.mozRequestFullScreen) {
-      spaceHulkIframe.mozRequestFullScreen();
-    } else if (spaceHulkIframe.msRequestFullscreen) {
-      spaceHulkIframe.msRequestFullscreen();
-    }
-  });
-
-  // Ensure autoplay works and show song title
-  const audio = document.getElementById("audio-player");
-  audio.volume = 0.7;
-  audio.play().catch(() => {});
-  // Optionally, update song title dynamically if you want to change tracks
-</script>
 </html>

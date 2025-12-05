@@ -17,59 +17,13 @@
         });
     </script>
     <div class="main-content" style="display: flex; flex-direction: column; align-items: center;">
-      <p style="font-size: 1.3em; text-align: center; margin-bottom: 2em;">This is a corrupted dimension. Beware what you may find here.</p>
+      <p style="font-size: 1.3em; text-align: center; margin-bottom: 2em;"></p>
+      <div style="margin-top: 20em; display: flex; justify-content: center;">
+        <img id="corrupted-gif" src="https://www.bing.com/th/id/OGC.0a9a35e5d52e57066c1db00a642f5b9e?o=7&cb=ucfimg2&pid=1.7&rm=3&rurl=https%3a%2f%2fmedia.tenor.com%2fjKGgpsJFL8wAAAAM%2fbonzi-buddy-look-up.gif&ehk=pi2bd69I1qv%2bdflkhsBuVyfFtITac3cBYAilPZm4mC0%3d&ucfimg=1" alt="Corrupted GIF" style="max-width: 1000px; max-height: 10000px; border-radius: 12px; box-shadow: 0 4px 24px #000a;" />
+      </div>
     </div>
 
     <script>
-      // Rain effect removed
-      // Hide default cursor and show image following mouse if the element exists
-      const cursorImg = document.getElementById("custom-cursor");
-      if (cursorImg) {
-        cursorImg.style.position = "fixed";
-        cursorImg.style.pointerEvents = "none";
-        cursorImg.style.zIndex = "10000";
-        cursorImg.style.width = "48px";
-        cursorImg.style.height = "48px";
-        document.body.style.cursor = "none";
-        let normalCursor = "assets/bright-blue-mouse-cursor-hd-png-Cg24Mv.png";
-        let pointerCursor = "assets/Adobe Express - file.png"; // Change to your pointer image
-
-        document.addEventListener("mousemove", function (e) {
-          cursorImg.style.display = "block";
-          cursorImg.style.left = e.clientX - 24 + "px";
-          cursorImg.style.top = e.clientY - 24 + "px";
-        });
-        document.addEventListener("mouseleave", function () {
-          cursorImg.style.display = "none";
-        });
-        document.addEventListener("mouseenter", function () {
-          cursorImg.style.display = "block";
-        });
-
-        // Change cursor image on hover over clickable elements
-        function setPointerCursor() {
-          if (cursorImg.src !== window.location.origin + "/" + pointerCursor) {
-            cursorImg.src = pointerCursor;
-          }
-        }
-        function setNormalCursor() {
-          if (cursorImg.src !== window.location.origin + "/" + normalCursor) {
-            cursorImg.src = normalCursor;
-          }
-        }
-
-        // For all clickable elements
-        const clickables = document.querySelectorAll(
-          'a, button, [role="button"], input[type="button"], input[type="submit"], .hypno-link'
-        );
-        clickables.forEach((el) => {
-          el.addEventListener("mouseenter", setPointerCursor);
-          el.addEventListener("mouseleave", setNormalCursor);
-        });
-
-        // Set initial cursor image
-        cursorImg.src = normalCursor;
-      }
     </script>
   <!-- Music Player -->
   <div

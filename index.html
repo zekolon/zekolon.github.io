@@ -71,8 +71,12 @@ profilePic.addEventListener('click', function() {
       if (!iframe) {
         iframe = document.createElement('iframe');
         iframe.id = 'explosion-iframe';
-        iframe.src = 'https://www.youtube.com/embed/pnPqf0G1BfY?si=4H4aKOTEBZI-OKcU title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>';
-        iframe.allow = 'autoplay';
+        iframe.src = "https://www.youtube.com/embed/xx7KcT3oNRM?si=Tw16rc00RS0RvytT";
+        iframe.title = "YouTube video player";
+        iframe.setAttribute('frameborder', '0');
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        iframe.setAttribute('allowfullscreen', 'true');
         iframe.style.position = 'fixed';
         iframe.style.top = '0';
         iframe.style.left = '0';

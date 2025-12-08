@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Favorite Games</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .content {
+        max-width: 1000px;
+        margin: 2rem auto;
+
+        margin-top: 1.25rem;
+      }
+      .article ul {
+        margin-left: 1.25rem;
+      }
+      .article footer {
+        margin-top: 1.6rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.03);
+        padding-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .article footer audio {
+        width: 320px;
+        max-width: 100%;
+      }
+      @media (max-width: 720px) {
+        .article {
+          padding: 1.2rem;
+          margin: 1rem;
+        }
+        .article h1 {
+          font-size: 1.6rem;
+        }
+      }
+      /* Image grid and figure styles */
+      .image-grid {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .article-figure {
+        flex: 1 1 0;
+        background: rgba(0, 0, 0, 0.02);
+        padding: 0.6rem;
+        border-radius: 6px;
+      }
+      .figure-title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        color: #dfefe0;
+        font-weight: 700;
+      }
+      .article-figure img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        max-width: 300px;
+      }
+      .figure-caption {
+        margin-top: 0.5rem;
+        color: #bfc;
+        font-size: 0.95rem;
+      }
+      @media (max-width: 720px) {
+        .image-grid {
+          flex-direction: column;
+        }
+      }
+      .body-paragraph {
+        margin-top: 1rem;
+        color: #dfefe0;
+        font-size: 1rem;
+      }
+      /* Pop-in animation (used for headers, images, titles, body paragraph)
+         Extended to match site-wide timing/easing from `style.css` */
+      .pop-in {
+        opacity: 0;
+        transform: translateY(8px) scale(0.995);
+        transition: opacity 700ms cubic-bezier(0.68, -0.55, 0.27, 1.55),
+          transform 700ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        will-change: opacity, transform;
+      }
+      .pop-in.visible {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status-bar-container"></div>
+    <script>
+      // load shared status bar
+      fetch("status-bar.html")
+        .then((r) => r.text())
+        .then((html) => {
+          document.getElementById("status-bar-container").innerHTML = html;
+        })
+        .catch(() => {});
+    </script>
+    <!-- Main header moved into main-content so background covers it -->
+
+    <main class="main-content content" role="main" style="padding-bottom: 1rem">
+      <header class="main-header" style="padding: 1.6rem 1rem 0">
+        <div style="max-width: 900px; margin: 0 auto">
+          <!-- Left vertical nav above the title -->
+          <nav
+            style="
+              display: flex;
+              flex-direction: row;
+              gap: 0.4rem;
+              margin-bottom: 1.2rem;
+              flex-wrap: wrap;
+            "
+          >
+            <a href="index.html" class="hypno-link" style="padding: 0.3em 0.6em; font-size: 0.9em">Home</a>
+            <a href="portfolio.html" class="hypno-link" style="padding: 0.3em 0.6em; font-size: 0.9em">Portfolio</a>
+            <a href="Music.html" class="hypno-link" style="padding: 0.3em 0.6em; font-size: 0.9em">Music</a>
+            <a href="Gallery.html" class="hypno-link" style="padding: 0.3em 0.6em; font-size: 0.9em">Gallery</a>
+            <a href="games.html" class="hypno-link" style="padding: 0.3em 0.6em; font-size: 0.9em">Games</a>
+          </nav>
+
+          <div style="flex: 1">
+            <h1 style="margin: 0 0 8px; text-align: left">
+              Favorite Video Games
+            </h1>
+            <p
+              class="description"
+              style="margin: 0 0 12px; color: #cfc; text-align: left"
+            >
+              This page includes images of and a short description of my
+              favorite video games i play.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <article class="article" role="article" aria-labelledby="article-title">
+        <section>
+          <h2>Shortlist</h2>
+          <ul>
+            <li>
+              <strong>The Changeling</strong> — Warhammer 40k & Warhammer
+              Fantasy
+            </li>
+            <li><strong>Vitrian Messinius</strong> — Warhammer 40k</li>
+            <li><strong>Sergeant Chronus</strong> — Warhammer 40k</li>
+            <li><strong>Isildur</strong> — Lord of the Rings & Middle Earth Strategy Board game</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The Changeling</h2>
+          <div style="margin-top: 0.6rem">
+            <figure
+              class="article-figure"
+              style="padding: 0; background: transparent"
+            >
+              <div
+                class="figure-title"
+                style="margin: 0 0 0.6rem; font-size: 1.1rem"
+              >
+                Warhammer 40k & Warhammer Fantasy
+              </div>
+              <img
+                src="assets/The-Changeling.jpg"
+                alt="Feature image"
+                style="border-radius: 6px"
+              />
+            </figure>
+          </div>
+          <p class="body-paragraph">
+            The Changeling is an Daemonic Herald of the Chaos god Tzeentch from
+            the war game Warhammer. I particularly like the Changeling because
+            of the antics it gets up to in the many books and novels it is
+            included in. some of these schemes include:
+          </p>
+          <p class="body-paragraph">
+            - The time he snuck a trio of Nurglings onto the Skull Throne,
+            creating a hideous noise and an unholy mess the next time the Chaos
+            god Khorne sat down.
+          </p>
+          <p class="body-paragraph">
+            - In the guise of a lowly Gretchin, the Changeling made a few
+            alterations to Warboss Gitsmasha's favoured Megashoota -- a fact
+            that only became apparent when it next fired, blowing Gitsmasha and
+            his retinue of Nobz to tiny green pieces.
+          </p>
+          <p class="body-paragraph">
+            Source: https://warhammer40k.fandom.com/wiki/Changeling
+          </p>
+        </section>
+
+        <footer>
+          <div style="flex: 1">
+            <strong id="song-title">Youre Promoted! by Jay Tholen</strong>
+            <div style="font-size: 0.9rem; color: #bfc"></div>
+          </div>
+          <audio
+            id="audio-player"
+            src="assets/Jay Tholen - Hypnospace Outlaw OST Vol. 2 - 37 You_re Promoted!.mp3"
+            controls
+            loop
+          ></audio>
+        </footer>
+      </article>
+    </main>
+
+    <!-- Bottom image slot copied from index layout -->
+    <div
+      class="bottom-image-slot"
+      style="
+        position: fixed;
+        right: 2vw;
+        bottom: 2vh;
+        z-index: 10001;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        pointer-events: auto;
+      "
+    >
+      <a href="Corrupted.html">
+        <img
+          src="assets/OIP__3_-removebg-preview.png"
+          alt="Bottom Slot Image"
+          style="
+            max-width: 220px;
+            max-height: 90px;
+            object-fit: contain;
+            box-shadow: 0 2px 8px #000a;
+            border-radius: 8px;
+          "
+        />
+      </a>
+    </div>
+
+    <!-- audio player moved into article footer -->
+
+    <script>
+      // Pop-in on scroll: reveal elements as they enter the viewport.
+      document.addEventListener("DOMContentLoaded", function () {
+        const groups = [
+          { sel: "#status-bar-container", step: 0 },
+          { sel: ".main-header h1", step: 60 },
+          { sel: ".description", step: 40 },
+          { sel: ".main-header nav, .main-header .hypno-link", step: 60 },
+          { sel: ".article h1", step: 80 },
+          { sel: ".article .byline", step: 40 },
+          { sel: ".article .lead", step: 40 },
+          { sel: ".article h2", step: 50 },
+          { sel: ".article ul li", step: 40 },
+          { sel: ".figure-title", step: 60 },
+          { sel: ".article-figure img", step: 60 },
+          { sel: ".body-paragraph", step: 50 },
+          { sel: "article footer", step: 0 },
+          { sel: ".bottom-image-slot", step: 0 },
+        ];
+
+        const nodesWithDelay = [];
+        groups.forEach((g) => {
+          const nodes = Array.from(document.querySelectorAll(g.sel));
+          nodes.forEach((n, idx) => {
+            n.classList.add("pop-in");
+            const delay = Math.min(600, idx * (g.step || 40));
+            n.dataset.popDelay = String(delay);
+            nodesWithDelay.push(n);
+          });
+        });
+
+        if (!("IntersectionObserver" in window)) {
+          nodesWithDelay.forEach((n, i) =>
+            setTimeout(() => n.classList.add("visible"), i * 60)
+          );
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            // Only reveal intersecting entries; sort by vertical position so
+            // items are revealed top-to-bottom. Stagger reveals so they don't
+            // all become visible at once when many items intersect together.
+            const intersecting = entries
+              .filter((e) => e.isIntersecting)
+              .sort(
+                (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+              );
+            intersecting.forEach((entry, idx) => {
+              const el = entry.target;
+              const base = Number(el.dataset.popDelay) || 0;
+              const stagger = idx * 80; // 80ms between items
+              const jitter = Math.floor(Math.random() * 60);
+              setTimeout(
+                () => el.classList.add("visible"),
+                base + stagger + jitter
+              );
+              obs.unobserve(el);
+            });
+          },
+          { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.08 }
+        );
+
+        nodesWithDelay.forEach((n) => observer.observe(n));
+      });
+
+      // set audio volume and try to play (silent fail if blocked)
+      const audio = document.getElementById("audio-player");
+      if (audio) {
+        audio.volume = 0.7;
+        audio.play && audio.play().catch(() => {});
+      }
+    </script>
+    <script>
+      // Permanent scramble all text on hidden Hypnospace Outlaw click (same behaviour as index)
+      function scrambleText(text) {
+        const chars =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{};:,.<>?";
+        return text
+          .split("")
+          .map((c) =>
+            c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]
+          )
+          .join("");
+      }
+      const scrambleEls = () =>
+        document.querySelectorAll(
+          "h1, h2, h3, h4, h5, h6, p, span, a, .status-bar, .status-text, .status-right"
+        );
+      const trigger = document.getElementById("scramble-hypno");
+      if (trigger) {
+        trigger.addEventListener("click", function () {
+          // Hide the trigger so it's secret
+          this.style.display = "none";
+          const els = scrambleEls();
+          els.forEach((el) => {
+            el.textContent = scrambleText(el.textContent);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

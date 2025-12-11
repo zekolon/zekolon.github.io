@@ -17,18 +17,158 @@
       });
   </script>
    <div class="main-content" style="display: flex; flex-direction: row; align-items: flex-start;">
-      <div style="flex: 1;">
-        <img src="assets/Knights of Avarice.webp" alt="Profile Picture" class="profile-pic" style="width: 130px; height: 130px; border-radius: 50%; margin-right: 40px; object-fit: cover; box-shadow: 0 2px 8px #000a; float: left;" />
-        <h1>Welcome to My Website!</h1>
-        <p style="text-align: center;">
-          This website is where i post images relating to my hobbies and more!
-        </p>
-         <div class="hypno-links" style="justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 1em;">
-        <a href="portfolio.html" class="hypno-link">Portfolio</a>
-        <a href="Gallery.html" class="hypno-link">Gallery</a>
-        <a href="#" class="hypno-link">TBA</a>
+      <div style="flex: 1; display: flex; flex-direction: row; align-items: flex-start;">
+  <img id="profile-pic" src="assets/Knights of Avarice.webp" alt="Profile Picture" class="profile-pic" style="width: 130px; height: 130px; border-radius: 50%; margin-right: 32px; object-fit: cover; box-shadow: 0 2px 8px #000a; cursor: pointer;" />
+</div>
+<style>
+@keyframes explodeText {
+  0% { opacity: 1; transform: scale(1) rotate(0deg) translate(0,0); filter: none; }
+  60% { opacity: 1; filter: none; }
+  100% {
+    opacity: 0;
+    filter: blur(8px) brightness(2);
+    transform:
+      scale(2.2)
+      rotate(720deg)
+      translate(
+        calc(-200px + 400px * var(--rand-x)),
+        calc(-120px + 240px * var(--rand-y))
+      );
+  }
+}
+.explode {
+  animation: explodeText 1.1s cubic-bezier(0.68,-0.55,0.27,1.55) forwards;
+}
+</style>
+<script>
+// 7-click easter egg: explode all text
+let clickCount = 0;
+const profilePic = document.getElementById('profile-pic');
+profilePic.addEventListener('click', function() {
+  clickCount++;
+  if (clickCount === 7) {
+    // Select all text elements, profile pic, large image, and body background
+    const textEls = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, .status-bar, .status-text, .status-right');
+    textEls.forEach(el => {
+      el.style.setProperty('--rand-x', Math.random());
+      el.style.setProperty('--rand-y', Math.random());
+      el.classList.add('explode');
+    });
+    // Profile picture
+    profilePic.style.setProperty('--rand-x', Math.random());
+    profilePic.style.setProperty('--rand-y', Math.random());
+    profilePic.classList.add('explode');
+    // Large image
+    const bigImg = document.getElementById('corrupted-large-img');
+    if (bigImg) {
+      bigImg.style.setProperty('--rand-x', Math.random());
+      bigImg.style.setProperty('--rand-y', Math.random());
+      bigImg.classList.add('explode');
+    }
+    // After explosion, show iframe video overlay (create valid attributes via DOM APIs)
+    setTimeout(function() {
+      let iframe = document.getElementById('explosion-iframe');
+      if (!iframe) {
+        // create a simple overlay wrapper so we can place a close button if needed
+        const overlay = document.createElement('div');
+        overlay.id = 'explosion-overlay';
+        Object.assign(overlay.style, {
+          position: 'fixed',
+          inset: '0',
+          background: 'rgba(0,0,0,0.9)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '20000'
+        });
+
+        iframe = document.createElement('iframe');
+        iframe.id = 'explosion-iframe';
+        // autoplay via URL param; rel=0 to avoid unrelated suggestions
+        iframe.src = 'https://www.youtube.com/embed/pnPqf0G1BfY?autoplay=1&rel=0';
+        iframe.title = 'YouTube video player';
+        iframe.frameBorder = '0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        Object.assign(iframe.style, {
+          width: '90vw',
+          height: '80vh',
+          border: 'none',
+          borderRadius: '12px',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.8)'
+        });
+
+        // add a simple close button
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '✕';
+        Object.assign(closeBtn.style, {
+          position: 'absolute',
+          top: '18px',
+          right: '22px',
+          zIndex: '20001',
+          background: 'transparent',
+          color: '#fff',
+          border: 'none',
+          fontSize: '28px',
+          cursor: 'pointer'
+        });
+        closeBtn.addEventListener('click', function () {
+          overlay.remove();
+        });
+
+        overlay.appendChild(iframe);
+        overlay.appendChild(closeBtn);
+        document.body.appendChild(overlay);
+      }
+    }, 1200);
+  }
+});
+</script>
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+          <h1 style="margin-bottom: 18px;">Welcome to My Website!</h1>
+          <p style="text-align: center;">
+            This website is where i post images relating to my hobbies and more! This website was inspired by <span id="scramble-hypno" style="color:inherit; background:none; text-shadow:none; text-decoration:none; border:none; outline:none; padding:0; margin:0;">Hypnospace Outlaw</span>!
+          </p>
+          <div class="hypno-links" style="justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 1em;">
+            <a href="portfolio.html" class="hypno-link">Portfolio</a>
+            <a href="Gallery.html" class="hypno-link">Gallery</a>
+            <a href="Music.html" class="hypno-link">Music</a>
+            <a href="lore-favorites.html" class="hypno-link">Favorite characters from my Hobbies</a>
+            <a href="games.html" class="hypno-link">Games</a>
+          </div>
+        </div>
+        <div style="flex: 0 0 auto; margin-left: 48px; display: flex; flex-direction: column; align-items: flex-start;">
+        <script>
+        // Permanent scramble all text on hidden Hypnospace Outlaw click
+        function scrambleText(text) {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{};:,.<>?';
+          return text.split('').map(c => (c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)])).join('');
+        }
+        const scrambleEls = () => document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, .status-bar, .status-text, .status-right');
+        document.getElementById('scramble-hypno').addEventListener('click', function() {
+          // Hide the trigger so it's secret
+          this.style.display = 'none';
+          const els = scrambleEls();
+          els.forEach(el => {
+            el.textContent = scrambleText(el.textContent);
+          });
+        });
+        </script>
+          <img id="corrupted-large-img" src="assets/1743177732956.png" alt="Corrupted Dimension" style="max-width: 90vw; max-width: 400px; max-height: 480px; display: none; border-radius: 18px; box-shadow: 0 8px 32px #000a; margin-top: 8px; display: block;" />
+        </div>
       </div>
     </div>
+<script>
+  // Pop-in effect for large image immediately, now inside main-content
+  window.addEventListener('DOMContentLoaded', function() {
+    var img = document.getElementById('corrupted-large-img');
+    if (img) {
+      img.style.display = 'block';
+      img.classList.add('pop-in-img');
+    }
+  });
+</script>
   <!-- Rain effect removed -->
     <div
       class="bottom-image-slot"
@@ -57,31 +197,8 @@
         />
       </a>
     </div>
-  </body>
-  <script>
-    // Rain effect removed
-  </script>
-</html>
     <!-- Music Player -->
-    <div
-      id="music-player"
-      style="
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100vw;
-        background: #181818ee;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5em 1em;
-        z-index: 9999;
-        box-shadow: 0 -2px 12px #000a;
-        font-family: inherit;
-      "
-    >
+    <div id="music-player" style="position: static; width: 100%; background: #181818ee; color: #fff; display: flex; align-items: center; justify-content: center; padding: 0.75em 1em; box-shadow: 0 -2px 12px #000a; font-family: inherit; margin-top: 2rem;">
       <span
         id="song-title"
         style="
@@ -143,8 +260,7 @@
             drop.x = Math.random() * window.innerWidth;
             drop.y = -drop.len;
             drop.len = 10 + Math.random() * 18;
-            drop.speed = 3 + Math.random
-            <a href="GameFavorites.html" class="hypno-link">Favorite Games</a>() * 4;
+            drop.speed = 3 + Math.random() * 4;
           }
         }
         requestAnimationFrame(drawRain);
@@ -205,3 +321,4 @@
     </script>
   </body>
 </html>
+

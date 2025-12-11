@@ -313,3 +313,37 @@ h1 {
   cursor: pointer;
   font-weight: 700;
 }
+
+/* Explosion effect used by the 7-click avatar easter egg */
+.explode {
+  animation: explode 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity, filter;
+  /* stagger using --i (set from JS) */
+  animation-delay: calc(var(--i, 0) * 1s);
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+    filter: none;
+  }
+  60% {
+    opacity: 0.85;
+    filter: blur(1px) saturate(1.05);
+  }
+  100% {
+    transform: translate(
+        calc(var(--rand-x, 0) * 120vw),
+        calc(var(--rand-y, 0) * 120vh)
+      )
+      rotate(calc(var(--rand-rot, 0) * 720deg)) scale(0.6);
+    opacity: 0;
+    filter: blur(6px) hue-rotate(20deg) saturate(0.8);
+  }
+}
+
+/* Slightly reduce impact on essential overlays so iframe appears above everything */
+#explosion-iframe {
+  pointer-events: auto;
+}
